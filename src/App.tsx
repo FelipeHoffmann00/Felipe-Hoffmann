@@ -5,7 +5,6 @@
 
 import { motion, AnimatePresence } from "motion/react";
 import { 
-  Briefcase, 
   GraduationCap, 
   Mail, 
   MapPin, 
@@ -16,7 +15,8 @@ import {
   ExternalLink,
   X,
   Link as LinkIcon,
-  Folder
+  Database,
+  Cpu
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { RESUME_DATA, Experience, Project } from "./constants";
@@ -99,7 +99,7 @@ export default function App() {
         {/* PROJECTS SECTION */}
         <section id="projects" className="space-y-12">
           <div className="flex items-center gap-4">
-            <Folder className="text-brand-ink" size={24} />
+            <Database className="text-brand-ink" size={24} />
             <h2 className="text-3xl font-bold tracking-tight">Projetos</h2>
           </div>
 
@@ -144,7 +144,7 @@ export default function App() {
         <section id="experience" className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           <div className="lg:col-span-8 space-y-12">
             <div className="flex items-center gap-4">
-              <Briefcase className="text-brand-ink" size={24} />
+              <Cpu className="text-brand-ink" size={24} />
               <h2 className="text-3xl font-bold tracking-tight">Experiência Profissional</h2>
             </div>
             
