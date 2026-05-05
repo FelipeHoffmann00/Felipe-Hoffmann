@@ -13,7 +13,6 @@ import {
   Github, 
   Twitter, 
   ChevronRight,
-  Download,
   ExternalLink,
   X,
   Link as LinkIcon,
@@ -53,21 +52,15 @@ export default function App() {
       {/* Navigation Rail / Header */}
       <nav className="fixed top-0 left-0 w-full h-16 border-b border-brand-line bg-brand-bg/80 backdrop-blur-md z-50 px-6 flex items-center justify-between">
         <div className="font-mono text-xs font-medium tracking-tighter uppercase">
-          {RESUME_DATA.name.split(' ').map(n => n[0]).join('.')} / PORTFOLIO
+          {(() => {
+            const parts = RESUME_DATA.name.split(' ');
+            return `${parts[0][0]}.${parts[parts.length - 1][0]}`;
+          })()} / PORTFOLIO
         </div>
         <div className="flex gap-6 items-center">
           <a href="#projects" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Projetos</a>
           <a href="#experience" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Experiência</a>
           <a href="#skills" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Habilidades</a>
-          <a 
-            href="/curriculo.pdf" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            download
-            className="flex items-center gap-2 px-4 py-2 bg-brand-ink text-brand-bg rounded-none text-[11px] font-mono uppercase tracking-widest hover:invert transition-all"
-          >
-            <Download size={14} /> CV PDF
-          </a>
         </div>
       </nav>
 
@@ -117,23 +110,26 @@ export default function App() {
                 variants={fadeIn}
                 initial="initial"
                 whileInView="animate"
-                whileHover={{ y: -10, scale: 1.02 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
+                whileHover={{ y: -8, x: 8 }}
+                transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
                 viewport={{ once: true }}
-                className="group p-6 bg-brand-line/10 border border-brand-line hover:border-brand-ink transition-all space-y-4 cursor-default"
+                className="group p-8 border-2 border-brand-ink transition-colors duration-300 space-y-6 cursor-default bg-brand-bg hover:bg-brand-ink"
               >
-                <div className="space-y-2">
-                  <h3 className="text-lg font-bold tracking-tight group-hover:text-brand-ink transition-colors">
+                <div className="space-y-3">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-muted group-hover:text-brand-bg/50 transition-colors">
+                    Project 0{i + 1}
+                  </div>
+                  <h3 className="text-xl font-bold tracking-tight group-hover:text-brand-bg transition-colors">
                     {project.title}
                   </h3>
-                  <p className="text-sm text-brand-muted leading-relaxed">
+                  <p className="text-sm text-brand-muted group-hover:text-brand-bg/70 leading-relaxed transition-colors">
                     {project.description}
                   </p>
                 </div>
                 {project.tags && (
                   <div className="flex flex-wrap gap-2 pt-2">
                     {project.tags.map((tag: string) => (
-                      <span key={tag} className="text-[9px] font-mono uppercase tracking-widest text-brand-muted bg-brand-bg px-2 py-1 border border-brand-line">
+                      <span key={tag} className="text-[9px] font-mono uppercase tracking-widest px-2 py-1 border border-brand-line group-hover:border-brand-bg/30 group-hover:text-brand-bg transition-all">
                         {tag}
                       </span>
                     ))}

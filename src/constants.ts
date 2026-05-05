@@ -30,7 +30,7 @@ export interface Project {
 }
 
 export const RESUME_DATA = {
-  name: "Felipe Gustavo Hoffmann",
+  name: "Felipe Hoffmann",
   title: "Analista de Tecnologia | Dados | Automação",
   location: "Sumaré, São Paulo",
   email: "fg.hoffmann2@gmail.com",
