@@ -1,0 +1,22 @@
+{
+  "entities": {
+    "Lead": {
+      "title": "Lead",
+      "description": "Informações de contato de visitantes interessados.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "message", "createdAt"]
+    }
+  },
+  "firestore": {
+    "leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Submissões de formulário de contato."
+    }
+  }
+}
