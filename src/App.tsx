@@ -16,10 +16,11 @@ import {
   Download,
   ExternalLink,
   X,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Folder
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { RESUME_DATA, Experience } from "./constants";
+import { RESUME_DATA, Experience, Project } from "./constants";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -55,11 +56,18 @@ export default function App() {
           {RESUME_DATA.name.split(' ').map(n => n[0]).join('.')} / PORTFOLIO
         </div>
         <div className="flex gap-6 items-center">
+          <a href="#projects" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Projetos</a>
           <a href="#experience" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Experiência</a>
           <a href="#skills" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Habilidades</a>
-          <button className="flex items-center gap-2 px-4 py-2 bg-brand-ink text-brand-bg rounded-none text-[11px] font-mono uppercase tracking-widest hover:invert transition-all">
+          <a 
+            href="./curriculo.pdf" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            download
+            className="flex items-center gap-2 px-4 py-2 bg-brand-ink text-brand-bg rounded-none text-[11px] font-mono uppercase tracking-widest hover:invert transition-all"
+          >
             <Download size={14} /> CV PDF
-          </button>
+          </a>
         </div>
       </nav>
 
@@ -73,10 +81,6 @@ export default function App() {
           className="space-y-8"
         >
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-brand-muted font-mono text-xs uppercase tracking-widest">
-              <span className="w-8 h-px bg-brand-line"></span>
-              Disponível para novos desafios
-            </div>
             <h1 className="text-6xl md:text-8xl font-bold tracking-tighter leading-[0.9] text-brand-ink">
               {RESUME_DATA.name}
             </h1>
@@ -99,6 +103,47 @@ export default function App() {
           </div>
         </motion.section>
 
+        {/* PROJECTS SECTION */}
+        <section id="projects" className="space-y-12">
+          <div className="flex items-center gap-4">
+            <Folder className="text-brand-ink" size={24} />
+            <h2 className="text-3xl font-bold tracking-tight">Projetos</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {(RESUME_DATA as any).projects.map((project: any, i: number) => (
+              <motion.div
+                key={i}
+                variants={fadeIn}
+                initial="initial"
+                whileInView="animate"
+                whileHover={{ y: -10, scale: 1.02 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                viewport={{ once: true }}
+                className="group p-6 bg-brand-line/10 border border-brand-line hover:border-brand-ink transition-all space-y-4 cursor-default"
+              >
+                <div className="space-y-2">
+                  <h3 className="text-lg font-bold tracking-tight group-hover:text-brand-ink transition-colors">
+                    {project.title}
+                  </h3>
+                  <p className="text-sm text-brand-muted leading-relaxed">
+                    {project.description}
+                  </p>
+                </div>
+                {project.tags && (
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {project.tags.map((tag: string) => (
+                      <span key={tag} className="text-[9px] font-mono uppercase tracking-widest text-brand-muted bg-brand-bg px-2 py-1 border border-brand-line">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
         {/* EXPERIENCE & EDUCATION */}
         <section id="experience" className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           <div className="lg:col-span-8 space-y-12">
@@ -118,6 +163,8 @@ export default function App() {
                 <motion.div 
                   key={i} 
                   variants={fadeIn} 
+                  whileHover={{ x: 10 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
                   onClick={() => setSelectedExperience(exp)}
                   className="group relative pl-8 border-l border-brand-line space-y-3 hover:border-brand-ink transition-colors cursor-pointer"
                 >
@@ -248,7 +295,7 @@ export default function App() {
           
           <div className="mt-16 pt-8 border-t border-brand-line text-center">
             <div className="text-[10px] font-mono text-brand-muted uppercase tracking-widest">
-              © {new Date().getFullYear()} {RESUME_DATA.name}
+              © {new Date().getFullYear()} <a href={RESUME_DATA.social.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-brand-ink transition-colors">{RESUME_DATA.name}</a>
             </div>
           </div>
         </footer>

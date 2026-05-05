@@ -97,5 +97,22 @@ export const RESUME_DATA = {
     linkedin: "https://www.linkedIn.com/in/felipe-hoffmann-9bb7361a4/",
     github: "https://github.com/FelipeHoffmann00",
     twitter: ""
-  }
+  },
+  projects: [
+    {
+      title: "Desenvolvimento de sistema SaaS para gestão de times (Firebase + IA)",
+      description: "Criação de plataforma completa para gerenciamento de equipes, integrando banco de dados em tempo real e inteligência artificial para otimização de fluxos.",
+      tags: ["Firebase", "AI", "SaaS"]
+    },
+    {
+      title: "Automação de processos e criação de planilhas inteligentes",
+      description: "Desenvolvimento de soluções personalizadas para automação de tarefas manuais e construção de dashboards dinâmicos para visualização de indicadores.",
+      tags: ["Automação", "Excel", "Dashboards"]
+    },
+    {
+      title: "Integração de dados para análise e tomada de decisão",
+      description: "Pipeline de dados estruturado para coletar informações de múltiplas fontes, transformá-las e gerar relatórios estratégicos para o negócio.",
+      tags: ["Data Analysis", "BI", "ETL"]
+    }
+  ] as Project[]
 };
