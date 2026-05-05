@@ -58,27 +58,27 @@ export default function App() {
             return `${parts[0][0]}.${parts[parts.length - 1][0]}`;
           })()} / PORTFOLIO
         </div>
-        <div className="flex gap-6 items-center">
+        <div className="flex gap-4 sm:gap-6 items-center">
           <a href="#projects" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Projetos</a>
           <a href="#experience" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Experiência</a>
           <a href="#skills" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Habilidades</a>
         </div>
       </nav>
 
-      <main className="max-w-6xl mx-auto px-6 pt-32 pb-24 space-y-32">
+      <main className="max-w-6xl mx-auto px-4 md:px-6 pt-24 md:pt-32 pb-16 md:pb-24 space-y-20 md:space-y-32">
         
         {/* HERO SECTION */}
         <motion.section 
           variants={fadeIn}
           initial="initial"
           animate="animate"
-          className="space-y-8"
+          className="space-y-6 md:space-y-8"
         >
           <div className="space-y-4">
-            <h1 className="text-6xl md:text-8xl font-bold tracking-tighter leading-[0.9] text-brand-ink">
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter leading-[1] md:leading-[0.9] text-brand-ink">
               {RESUME_DATA.name}
             </h1>
-            <p className="text-2xl md:text-3xl text-brand-muted font-light tracking-tight max-w-2xl">
+            <p className="text-xl md:text-3xl text-brand-muted font-light tracking-tight max-w-2xl">
               {RESUME_DATA.title}
             </p>
           </div>
@@ -92,7 +92,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="max-w-2xl text-lg text-brand-muted leading-relaxed">
+          <div className="max-w-2xl text-base md:text-lg text-brand-muted leading-relaxed">
             {RESUME_DATA.summary}
           </div>
         </motion.section>
@@ -113,7 +113,7 @@ export default function App() {
                 whileHover={{ y: -8, x: 8 }}
                 transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
                 viewport={{ once: true }}
-                className="group p-8 border-2 border-brand-ink transition-colors duration-300 space-y-6 cursor-default bg-brand-bg hover:bg-brand-ink"
+                className="group p-6 md:p-8 border-2 border-brand-ink transition-colors duration-300 space-y-6 cursor-default bg-brand-bg hover:bg-brand-ink"
               >
                 <div className="space-y-3">
                   <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-muted group-hover:text-brand-bg/50 transition-colors">
@@ -202,12 +202,12 @@ export default function App() {
           </div>
         </section>
 
-        <section id="skills" className="space-y-16">
+        <section id="skills" className="space-y-12 md:space-y-16">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-brand-line pb-8">
             <div className="space-y-4">
               <div className="flex items-center gap-4">
                 <Zap className="text-brand-ink" size={24} />
-                <h2 className="text-5xl font-bold tracking-tighter">Habilidades</h2>
+                <h2 className="text-4xl md:text-5xl font-bold tracking-tighter">Habilidades</h2>
               </div>
               <p className="text-brand-muted font-mono text-sm">Competências técnicas e linguísticas</p>
             </div>
@@ -241,10 +241,10 @@ export default function App() {
         </section>
 
         {/* FOOTER / CONTACT */}
-        <footer className="pt-32 border-t border-brand-line">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+        <footer className="pt-20 md:pt-32 border-t border-brand-line">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
             <div className="space-y-8">
-              <h2 className="text-4xl font-bold tracking-tighter">Vamos construir algo juntos?</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tighter">Vamos construir algo juntos?</h2>
               
               <div className="space-y-6 max-w-md">
                 <p className="text-brand-muted leading-relaxed">
