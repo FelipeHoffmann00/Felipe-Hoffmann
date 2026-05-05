@@ -15,8 +15,9 @@ import {
   ExternalLink,
   X,
   Link as LinkIcon,
-  Database,
-  Cpu
+  Code2,
+  Activity,
+  Zap
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { RESUME_DATA, Experience, Project } from "./constants";
@@ -96,10 +97,9 @@ export default function App() {
           </div>
         </motion.section>
 
-        {/* PROJECTS SECTION */}
         <section id="projects" className="space-y-12">
           <div className="flex items-center gap-4">
-            <Database className="text-brand-ink" size={24} />
+            <Code2 className="text-brand-ink" size={24} />
             <h2 className="text-3xl font-bold tracking-tight">Projetos</h2>
           </div>
 
@@ -144,7 +144,7 @@ export default function App() {
         <section id="experience" className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           <div className="lg:col-span-8 space-y-12">
             <div className="flex items-center gap-4">
-              <Cpu className="text-brand-ink" size={24} />
+              <Activity className="text-brand-ink" size={24} />
               <h2 className="text-3xl font-bold tracking-tight">Experiência Profissional</h2>
             </div>
             
@@ -202,11 +202,13 @@ export default function App() {
           </div>
         </section>
 
-        {/* SKILLS SECTION */}
         <section id="skills" className="space-y-16">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-brand-line pb-8">
             <div className="space-y-4">
-              <h2 className="text-5xl font-bold tracking-tighter">Habilidades</h2>
+              <div className="flex items-center gap-4">
+                <Zap className="text-brand-ink" size={24} />
+                <h2 className="text-5xl font-bold tracking-tighter">Habilidades</h2>
+              </div>
               <p className="text-brand-muted font-mono text-sm">Competências técnicas e linguísticas</p>
             </div>
             <div className="text-right">
