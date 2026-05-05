@@ -60,7 +60,7 @@ export default function App() {
           <a href="#experience" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Experiência</a>
           <a href="#skills" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Habilidades</a>
           <a 
-            href="./curriculo.pdf" 
+            href="/curriculo.pdf" 
             target="_blank" 
             rel="noopener noreferrer"
             download
