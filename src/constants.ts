@@ -8,6 +8,7 @@ export interface Experience {
   period: string;
   description: string;
   technologies?: string[];
+  url?: string;
 }
 
 export interface Education {
@@ -41,28 +42,32 @@ export const RESUME_DATA = {
       role: "Estagiário de Dados e Tecnologia",
       period: "2024 — Atual",
       description: "Desenvolvimento de automações para redução de tarefas operacionais manuais. Criação de SaaS para gestão de times utilizando Firebase e Google AI Studio. Coleta, tratamento e análise de dados para geração de insights estratégicos.",
-      technologies: ["JavaScript", "Firebase", "Google AI Studio", "Python", "SQL"]
+      technologies: ["JavaScript", "Firebase", "Google AI Studio", "Python", "SQL"],
+      url: "https://enactus.org.br/"
     },
     {
       company: "Arppen",
       role: "Estagiário de Design",
       period: "2023 — 2024",
       description: "Criação de materiais visuais para redes sociais e apresentações comerciais, contribuindo para um aumento de 20% no engajamento digital. Suporte em processos internos com organização de dados.",
-      technologies: ["Design Digital", "Excel", "Marketing Visual"]
+      technologies: ["Design Digital", "Excel", "Marketing Visual"],
+      url: "https://www.arppen.com/"
     },
     {
       company: "De Santa Transporte Rodoviário",
       role: "Auxiliar Administrativo",
       period: "2020 — 2021",
       description: "Otimização de relatórios com Excel avançado, automação de processos administrativos e gestão de dados internos.",
-      technologies: ["Excel Avançado", "Automação", "Gestão de Dados"]
+      technologies: ["Excel Avançado", "Automação", "Gestão de Dados"],
+      url: "https://www.desantalog.com.br/"
     },
     {
       company: "3M do Brasil",
       role: "Auxiliar Administrativo",
       period: "2016 — 2018",
       description: "Digitalização e organização de dados corporativos. Foco na melhoria de processos internos com uso de ferramentas de análise.",
-      technologies: ["Processos", "Excel", "Data Cleaning"]
+      technologies: ["Processos", "Excel", "Data Cleaning"],
+      url: "https://www.3m.com.br/3M/pt_BR/3m-do-brasil/"
     }
   ] as Experience[],
   education: [

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { 
   Briefcase, 
   GraduationCap, 
@@ -14,12 +14,12 @@ import {
   Twitter, 
   ChevronRight,
   Download,
-  Send
+  ExternalLink,
+  X,
+  Link as LinkIcon
 } from "lucide-react";
-import { useState } from "react";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "./lib/firebase";
-import { RESUME_DATA } from "./constants";
+import { useState, useEffect } from "react";
+import { RESUME_DATA, Experience } from "./constants";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -36,29 +36,17 @@ const staggerContainer = {
 };
 
 export default function App() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [status, setStatus] = useState<{ type: 'success' | 'error', msg: string } | null>(null);
+  const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setStatus(null);
+  // Close modal on escape key
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedExperience(null);
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, []);
 
-    try {
-      await addDoc(collection(db, "leads"), {
-        ...formData,
-        createdAt: serverTimestamp()
-      });
-      setStatus({ type: 'success', msg: 'Mensagem enviada com sucesso!' });
-      setFormData({ name: "", email: "", message: "" });
-    } catch (error) {
-      console.error(error);
-      setStatus({ type: 'error', msg: 'Erro ao enviar mensagem. Tente novamente.' });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
   return (
     <div className="min-h-screen selection:bg-brand-ink selection:text-brand-bg">
       {/* Navigation Rail / Header */}
@@ -127,7 +115,12 @@ export default function App() {
               className="space-y-12"
             >
               {RESUME_DATA.experience.map((exp, i) => (
-                <motion.div key={i} variants={fadeIn} className="group relative pl-8 border-l border-brand-line space-y-3 hover:border-brand-ink transition-colors">
+                <motion.div 
+                  key={i} 
+                  variants={fadeIn} 
+                  onClick={() => setSelectedExperience(exp)}
+                  className="group relative pl-8 border-l border-brand-line space-y-3 hover:border-brand-ink transition-colors cursor-pointer"
+                >
                   <div className="absolute -left-[5px] top-1.5 w-2 h-2 bg-brand-line group-hover:bg-brand-ink transition-colors" />
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                     <h3 className="text-xl font-bold tracking-tight">{exp.role}</h3>
@@ -136,18 +129,12 @@ export default function App() {
                     </span>
                   </div>
                   <div className="text-brand-ink font-medium">{exp.company}</div>
-                  <p className="text-brand-muted leading-relaxed max-w-3xl">
+                  <p className="text-brand-muted leading-relaxed max-w-3xl line-clamp-2">
                     {exp.description}
                   </p>
-                  {exp.technologies && (
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {exp.technologies.map(tech => (
-                        <span key={tech} className="text-[10px] font-mono uppercase tracking-widest text-brand-ink bg-brand-line/50 px-2 py-0.5">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  <div className="flex items-center gap-2 text-[10px] font-mono text-brand-muted uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                    Ver detalhes <ChevronRight size={10} />
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
@@ -214,48 +201,17 @@ export default function App() {
             <div className="space-y-8">
               <h2 className="text-4xl font-bold tracking-tighter">Vamos construir algo juntos?</h2>
               
-              <form onSubmit={handleSubmit} className="space-y-6 max-w-md">
-                <div className="grid grid-cols-1 gap-4">
-                  <input 
-                    type="text" 
-                    placeholder="Nome"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-brand-line/20 border border-brand-line p-4 text-sm font-mono focus:outline-none focus:border-brand-ink transition-colors"
-                  />
-                  <input 
-                    type="email" 
-                    placeholder="E-mail"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-brand-line/20 border border-brand-line p-4 text-sm font-mono focus:outline-none focus:border-brand-ink transition-colors"
-                  />
-                  <textarea 
-                    placeholder="Sua mensagem"
-                    required
-                    rows={4}
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full bg-brand-line/20 border border-brand-line p-4 text-sm font-mono focus:outline-none focus:border-brand-ink transition-colors resize-none"
-                  />
-                </div>
-                
-                {status && (
-                  <div className={`text-xs font-mono uppercase tracking-widest ${status.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
-                    {status.msg}
-                  </div>
-                )}
-
-                <button 
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex items-center gap-2 px-8 py-4 bg-brand-ink text-brand-bg rounded-none text-xs font-mono uppercase tracking-[0.2em] hover:invert transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              <div className="space-y-6 max-w-md">
+                <p className="text-brand-muted leading-relaxed">
+                  Estou sempre aberto a novos projetos e parcerias. Clique no botão abaixo para me enviar um e-mail diretamente.
+                </p>
+                <a 
+                  href="mailto:fg.hoffmann2@gmail.com"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-brand-ink text-brand-bg rounded-none text-xs font-mono uppercase tracking-[0.2em] hover:invert transition-all"
                 >
-                  {isSubmitting ? "Enviando..." : <><Send size={16} /> Enviar Mensagem</>}
-                </button>
-              </form>
+                  <ExternalLink size={16} /> Entrar em Contato
+                </a>
+              </div>
 
               <div className="flex gap-4 pt-4">
                 <a 
@@ -288,14 +244,11 @@ export default function App() {
                 )}
               </div>
             </div>
-
-            <div className="flex flex-col justify-end space-y-4">
-              <p className="text-brand-muted text-sm font-mono leading-relaxed">
-                Desenvolva seu futuro elevando sua presença digital. Projetado com foco em tipografia e clareza.
-              </p>
-              <div className="text-[10px] font-mono text-brand-muted uppercase tracking-widest pt-4">
-                © {new Date().getFullYear()} {RESUME_DATA.name} — All Rights Reserved
-              </div>
+          </div>
+          
+          <div className="mt-16 pt-8 border-t border-brand-line text-center">
+            <div className="text-[10px] font-mono text-brand-muted uppercase tracking-widest">
+              © {new Date().getFullYear()} {RESUME_DATA.name}
             </div>
           </div>
         </footer>
@@ -306,6 +259,91 @@ export default function App() {
       <div className="fixed inset-0 pointer-events-none opacity-[0.03] overflow-hidden -z-10">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#141414_1px,transparent_1px),linear-gradient(to_bottom,#141414_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
       </div>
+
+      {/* Experience Modal */}
+      <AnimatePresence>
+        {selectedExperience && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedExperience(null)}
+              className="fixed inset-0 bg-brand-bg/90 backdrop-blur-sm z-[60] cursor-crosshair"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl bg-brand-bg border border-brand-line p-8 md:p-12 z-[70] shadow-2xl overflow-y-auto max-h-[90vh]"
+            >
+              <button 
+                onClick={() => setSelectedExperience(null)}
+                className="absolute top-6 right-6 p-2 hover:bg-brand-line/20 transition-colors"
+                aria-label="Fecar modal"
+              >
+                <X size={20} />
+              </button>
+
+              <div className="space-y-8">
+                <div className="space-y-2">
+                  <div className="font-mono text-xs text-brand-muted uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-4 h-px bg-brand-line"></span>
+                    {selectedExperience.period}
+                  </div>
+                  <h3 className="text-4xl font-bold tracking-tighter text-brand-ink">
+                    {selectedExperience.role}
+                  </h3>
+                  <div className="flex items-center justify-between">
+                    <div className="text-xl text-brand-muted">{selectedExperience.company}</div>
+                    {selectedExperience.url && (
+                      <a 
+                        href={selectedExperience.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-brand-ink hover:underline"
+                      >
+                        <LinkIcon size={14} /> Website
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                <div className="h-px bg-brand-line w-full" />
+
+                <div className="space-y-4">
+                  <h4 className="font-mono text-[10px] uppercase tracking-widest text-brand-muted">Descrição</h4>
+                  <p className="text-lg leading-relaxed text-brand-muted">
+                    {selectedExperience.description}
+                  </p>
+                </div>
+
+                {selectedExperience.technologies && (
+                  <div className="space-y-4">
+                    <h4 className="font-mono text-[10px] uppercase tracking-widest text-brand-muted">Tecnologias</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedExperience.technologies.map(tech => (
+                        <span key={tech} className="px-3 py-1 bg-brand-line/30 text-brand-ink text-xs font-mono uppercase tracking-tighter">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="pt-8">
+                   <button 
+                    onClick={() => setSelectedExperience(null)}
+                    className="w-full py-4 border border-brand-ink bg-brand-ink text-brand-bg font-mono text-xs uppercase tracking-widest hover:bg-brand-bg hover:text-brand-ink transition-all"
+                  >
+                    Fechar Detalhes
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

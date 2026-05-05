@@ -2,21 +2,35 @@
   "entities": {
     "Lead": {
       "title": "Lead",
-      "description": "Informações de contato de visitantes interessados.",
+      "description": "Contact form submissions from potential leads or clients.",
       "type": "object",
       "properties": {
-        "name": { "type": "string" },
-        "email": { "type": "string" },
-        "message": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
+        "name": {
+          "type": "string",
+          "description": "Full name of the person contacting."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Email address of the person contacting."
+        },
+        "message": {
+          "type": "string",
+          "description": "The message sent by the person."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the lead was created."
+        }
       },
       "required": ["name", "email", "message", "createdAt"]
     }
   },
   "firestore": {
-    "leads/{leadId}": {
+    "/leads/{leadId}": {
       "schema": "Lead",
-      "description": "Submissões de formulário de contato."
+      "description": "Collection of contact messages."
     }
   }
 }
