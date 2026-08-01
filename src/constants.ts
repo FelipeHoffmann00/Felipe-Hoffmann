@@ -31,17 +31,17 @@ export interface Project {
 
 export const RESUME_DATA = {
   name: "Felipe Hoffmann",
-  title: "Analista de Tecnologia | Dados | Automação",
+  title: "Líder de Projetos de Dados e Tecnologia",
   location: "Sumaré, São Paulo",
   email: "fg.hoffmann2@gmail.com",
   phone: "(19) 9 8251-5435",
-  summary: "Profissional em formação em Análise e Desenvolvimento de Sistemas com experiência prática em dados, automação e desenvolvimento de soluções tecnológicas. Atuação no desenvolvimento de aplicações, integração com banco de dados e criação de automações para otimização de processos. Experiência com JavaScript e Firebase, além de participação em projetos de impacto nacional.",
+  summary: "Líder de Projetos em formação em Análise e Desenvolvimento de Sistemas com experiência prática em dados, automação e desenvolvimento de soluções tecnológicas. Atuação na liderança e desenvolvimento de aplicações, integração com banco de dados e criação de automações para otimização de processos.",
   experience: [
     {
       company: "Enactus Brasil",
-      role: "Estagiário de Dados e Tecnologia",
+      role: "Líder de Projetos de Dados e Tecnologia",
       period: "2024 — Atual",
-      description: "Desenvolvimento de automações para redução de tarefas operacionais manuais. Criação de SaaS para gestão de times utilizando Firebase e Google AI Studio. Coleta, tratamento e análise de dados para geração de insights estratégicos.",
+      description: "Liderança e desenvolvimento de automações para redução de tarefas operacionais manuais. Criação de SaaS para gestão de times utilizando Firebase e Google AI Studio. Coleta, tratamento e análise de dados para geração de insights estratégicos.",
       technologies: ["JavaScript", "Firebase", "Google AI Studio", "Python", "SQL"],
       url: "https://enactus.org.br/"
     },
