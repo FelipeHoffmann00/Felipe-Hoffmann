@@ -117,7 +117,7 @@ export default function App() {
               >
                 <div className="space-y-3">
                   <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-muted group-hover:text-brand-bg/50 transition-colors">
-                    Project 0{i + 1}
+                    Projeto 0{i + 1}
                   </div>
                   <h3 className="text-xl font-bold tracking-tight group-hover:text-brand-bg transition-colors">
                     {project.title}

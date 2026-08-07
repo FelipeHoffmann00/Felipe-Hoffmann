@@ -54,7 +54,7 @@ export const RESUME_DATA = {
       url: "https://www.arppen.com/"
     },
     {
-      company: "De Santa Transporte Rodoviário",
+      company: "De Santa Transporte Rodoviário de Cargas ltda.",
       role: "Auxiliar Administrativo",
       period: "2020 — 2021",
       description: "Otimização de relatórios com Excel avançado, automação de processos administrativos e gestão de dados internos.",
@@ -101,6 +101,7 @@ export const RESUME_DATA = {
     { name: "Pensamento Analítico", category: "Soft Skills" },
     { name: "Resolução de Problemas", category: "Soft Skills" },
     { name: "Trabalho em Equipe", category: "Soft Skills" },
+    { name: "Comunicação Assertiva", category: "Soft Skills" },
     { name: "Inglês Avançado", category: "Languages" }
   ] as Skill[],
   social: {
