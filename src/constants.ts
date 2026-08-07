@@ -35,7 +35,7 @@ export const RESUME_DATA = {
   location: "Sumaré, São Paulo",
   email: "fg.hoffmann2@gmail.com",
   phone: "(19) 9 8251-5435",
-  summary: "Líder de Projetos em formação em Análise e Desenvolvimento de Sistemas com experiência prática em dados, automação e desenvolvimento de soluções tecnológicas. Atuação na liderança e desenvolvimento de aplicações, integração com banco de dados e criação de automações para otimização de processos.",
+  summary: "Líder de Projetos graduado em Análise e Desenvolvimento de Sistemas com experiência prática em dados, automação e desenvolvimento de soluções tecnológicas. Atuação na liderança e desenvolvimento de aplicações, integração com banco de dados e criação de automações para otimização de processos.",
   experience: [
     {
       company: "Enactus Brasil",
@@ -74,7 +74,7 @@ export const RESUME_DATA = {
     {
       institution: "Faculdade de Tecnologia (ADS)",
       degree: "Tecnólogo em Análise e Desenvolvimento de Sistemas",
-      period: "2023 — 2026"
+      period: "Concluído"
     }
   ] as Education[],
   skills: [
