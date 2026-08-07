@@ -72,9 +72,19 @@ export const RESUME_DATA = {
   ] as Experience[],
   education: [
     {
-      institution: "Faculdade de Tecnologia (ADS)",
+      institution: "FATEC Americana",
       degree: "Tecnólogo em Análise e Desenvolvimento de Sistemas",
-      period: "Concluído"
+      period: "2023 — 2026"
+    },
+    {
+      institution: "Escola Municipal Dr. Leandro Franceschini",
+      degree: "Técnico em Informática",
+      period: "2016 — 2019"
+    },
+    {
+      institution: "SENAI de Sumaré",
+      degree: "Técnico em Eletromecânica",
+      period: "2018 — 2019"
     }
   ] as Education[],
   skills: [
