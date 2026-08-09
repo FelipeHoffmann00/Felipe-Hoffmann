@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { RESUME_DATA, Experience, Project } from "./constants";
+import { ContactForm } from "./components/ContactForm";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -242,28 +243,23 @@ export default function App() {
 
         {/* FOOTER / CONTACT */}
         <footer className="pt-20 md:pt-32 border-t border-brand-line">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
             <div className="space-y-8">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tighter">Vamos construir algo juntos?</h2>
               
               <div className="space-y-6 max-w-md">
                 <p className="text-brand-muted leading-relaxed">
-                  Estou sempre aberto a novos projetos e parcerias. Clique no botão abaixo para me enviar um e-mail diretamente.
+                  Estou sempre aberto a novos projetos, oportunidades e parcerias. Preencha o formulário ao lado para me enviar uma mensagem diretamente.
                 </p>
-                <a 
-                  href="mailto:fg.hoffmann2@gmail.com"
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-brand-ink text-brand-bg rounded-none text-xs font-mono uppercase tracking-[0.2em] hover:invert transition-all"
-                >
-                  <ExternalLink size={16} /> Entrar em Contato
-                </a>
               </div>
 
-              <div className="flex gap-4 pt-4">
+              <div className="flex gap-4 pt-2">
                 <a 
                   href={RESUME_DATA.social.linkedin} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="p-4 border border-brand-line hover:bg-brand-ink hover:text-brand-bg transition-all"
+                  aria-label="LinkedIn"
                 >
                   <Linkedin size={20} />
                 </a>
@@ -273,6 +269,7 @@ export default function App() {
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="p-4 border border-brand-line hover:bg-brand-ink hover:text-brand-bg transition-all"
+                    aria-label="GitHub"
                   >
                     <Github size={20} />
                   </a>
@@ -283,11 +280,17 @@ export default function App() {
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="p-4 border border-brand-line hover:bg-brand-ink hover:text-brand-bg transition-all"
+                    aria-label="Twitter"
                   >
                     <Twitter size={20} />
                   </a>
                 )}
               </div>
+            </div>
+
+            {/* Contact Form */}
+            <div>
+              <ContactForm />
             </div>
           </div>
           
