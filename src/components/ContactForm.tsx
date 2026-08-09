@@ -133,7 +133,7 @@ export const ContactForm: React.FC = () => {
             rows={4}
             value={formData.message}
             onChange={handleChange}
-            placeholder="Como posso te ajudar?"
+            placeholder="Vamos iniciar nossa conversa!"
             className="w-full px-4 py-3 bg-transparent border border-brand-line text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans resize-none"
           />
         </div>
