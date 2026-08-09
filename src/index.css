@@ -1,25 +1,52 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --brand-bg: #F8F8F7;
+  --brand-ink: #141414;
+  --brand-muted: #6B6B6B;
+  --brand-line: #E2E2E1;
+  --brand-grid: rgba(20, 20, 20, 0.025);
+}
+
+html.dark {
+  --brand-bg: #121212;
+  --brand-ink: #F4F4F2;
+  --brand-muted: #9E9E9C;
+  --brand-line: #2A2A28;
+  --brand-grid: rgba(244, 244, 242, 0.018);
 }
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-brand-bg: #F8F8F7;
-  --color-brand-ink: #141414;
-  --color-brand-muted: #6B6B6B;
-  --color-brand-line: #E2E2E1;
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-line: var(--brand-line);
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--brand-bg);
+    color: var(--brand-ink);
+  }
   body {
-    @apply bg-brand-bg text-brand-ink font-sans antialiased;
+    background-color: var(--brand-bg);
+    background-image: 
+      linear-gradient(to right, var(--brand-grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--brand-grid) 1px, transparent 1px);
+    background-size: 3.5rem 3.5rem;
+    background-attachment: fixed;
+    color: var(--brand-ink);
+    font-family: var(--font-sans);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
   }
 }
+
 

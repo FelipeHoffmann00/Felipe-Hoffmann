@@ -17,11 +17,14 @@ import {
   Link as LinkIcon,
   Code2,
   Activity,
-  Zap
+  Zap,
+  Sun,
+  Moon
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { RESUME_DATA, Experience, Project } from "./constants";
 import { ContactForm } from "./components/ContactForm";
+import felipePhoto from "./assets/images/Felipe.png";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -39,6 +42,28 @@ const staggerContainer = {
 
 export default function App() {
   const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
+  
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved === 'dark';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      root.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDark]);
+
+  const toggleTheme = () => setIsDark(prev => !prev);
 
   // Close modal on escape key
   useEffect(() => {
@@ -50,19 +75,34 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen selection:bg-brand-ink selection:text-brand-bg">
+    <div className="min-h-screen selection:bg-brand-ink selection:text-brand-bg transition-colors duration-300">
       {/* Navigation Rail / Header */}
-      <nav className="fixed top-0 left-0 w-full h-16 border-b border-brand-line bg-brand-bg/80 backdrop-blur-md z-50 px-6 flex items-center justify-between">
-        <div className="font-mono text-xs font-medium tracking-tighter uppercase">
-          {(() => {
-            const parts = RESUME_DATA.name.split(' ');
-            return `${parts[0][0]}.${parts[parts.length - 1][0]}`;
-          })()} / PORTFOLIO
-        </div>
-        <div className="flex gap-4 sm:gap-6 items-center">
-          <a href="#projects" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Projetos</a>
-          <a href="#experience" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Experiência</a>
-          <a href="#skills" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Habilidades</a>
+      <nav className="fixed top-0 left-0 w-full h-16 border-b border-brand-line bg-brand-bg/80 backdrop-blur-md z-50 transition-colors duration-300">
+        <div className="max-w-6xl mx-auto w-full h-full px-4 md:px-6 flex items-center justify-between">
+          <a 
+            href="#" 
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="font-mono text-xs font-semibold tracking-wider uppercase text-brand-ink hover:opacity-70 transition-opacity cursor-pointer"
+          >
+            FELIPE HOFFMANN
+          </a>
+          <div className="flex gap-4 sm:gap-6 items-center">
+            <a href="#projects" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Projetos</a>
+            <a href="#experience" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Experiência</a>
+            <a href="#skills" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Habilidades</a>
+            
+            <button
+              onClick={toggleTheme}
+              className="p-2 border border-brand-line hover:border-brand-ink text-brand-ink transition-all flex items-center justify-center rounded-none ml-1 sm:ml-2"
+              aria-label={isDark ? "Ativar Modo Claro" : "Ativar Modo Escuro"}
+              title={isDark ? "Modo Claro" : "Modo Escuro"}
+            >
+              {isDark ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -73,28 +113,51 @@ export default function App() {
           variants={fadeIn}
           initial="initial"
           animate="animate"
-          className="space-y-6 md:space-y-8"
+          className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center"
         >
-          <div className="space-y-4">
-            <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter leading-[1] md:leading-[0.9] text-brand-ink">
-              {RESUME_DATA.name}
-            </h1>
-            <p className="text-xl md:text-3xl text-brand-muted font-light tracking-tight max-w-2xl">
-              {RESUME_DATA.title}
-            </p>
+          <div className="md:col-span-8 space-y-6 md:space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter leading-[1] md:leading-[0.9] text-brand-ink">
+                {RESUME_DATA.name}
+              </h1>
+              <p className="text-xl md:text-3xl text-brand-muted font-light tracking-tight max-w-2xl">
+                {RESUME_DATA.title}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-6 items-center text-sm font-mono text-brand-muted">
+              <div className="flex items-center gap-2">
+                <MapPin size={16} /> {RESUME_DATA.location}
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail size={16} /> {RESUME_DATA.email}
+              </div>
+            </div>
+
+            <div className="max-w-2xl text-base md:text-lg text-brand-muted leading-relaxed">
+              {RESUME_DATA.summary}
+            </div>
           </div>
 
-          <div className="flex flex-wrap gap-6 items-center text-sm font-mono text-brand-muted">
-            <div className="flex items-center gap-2">
-              <MapPin size={16} /> {RESUME_DATA.location}
-            </div>
-            <div className="flex items-center gap-2">
-              <Mail size={16} /> {RESUME_DATA.email}
-            </div>
-          </div>
+          <div className="md:col-span-4 flex justify-center md:justify-end">
+            <div className="max-w-[280px] w-full space-y-3">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-none border border-transparent bg-brand-bg">
+                <img 
+                  src={felipePhoto} 
+                  alt={RESUME_DATA.name}
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500 ease-out"
+                />
+              </div>
 
-          <div className="max-w-2xl text-base md:text-lg text-brand-muted leading-relaxed">
-            {RESUME_DATA.summary}
+              <div className="w-full py-2.5 px-3 rounded-none border border-brand-ink/60 dark:border-white/40 bg-transparent flex items-center justify-center gap-2 font-mono text-xs text-brand-ink">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="font-normal text-brand-ink tracking-tight">Disponível para novos projetos</span>
+              </div>
+            </div>
           </div>
         </motion.section>
 
@@ -302,11 +365,6 @@ export default function App() {
         </footer>
 
       </main>
-
-      {/* Decorative Grid Overlay (Subtle) */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.03] overflow-hidden -z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#141414_1px,transparent_1px),linear-gradient(to_bottom,#141414_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
-      </div>
 
       {/* Experience Modal */}
       <AnimatePresence>
