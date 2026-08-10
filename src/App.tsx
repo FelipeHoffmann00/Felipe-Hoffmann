@@ -117,10 +117,10 @@ export default function App() {
         >
           <div className="md:col-span-8 space-y-6 md:space-y-8">
             <div className="space-y-4">
-              <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter leading-[1] md:leading-[0.9] text-brand-ink">
+              <h1 className="font-display text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter leading-[1] md:leading-[0.9] text-brand-ink">
                 {RESUME_DATA.name}
               </h1>
-              <p className="text-xl md:text-3xl text-brand-muted font-light tracking-tight max-w-2xl">
+              <p className="font-display text-xl md:text-3xl text-brand-muted font-light tracking-tight max-w-2xl">
                 {RESUME_DATA.title}
               </p>
             </div>
@@ -134,7 +134,7 @@ export default function App() {
               </div>
             </div>
 
-            <div className="max-w-2xl text-base md:text-lg text-brand-muted leading-relaxed">
+            <div className="font-display max-w-2xl text-base md:text-lg text-brand-muted leading-relaxed">
               {RESUME_DATA.summary}
             </div>
           </div>
@@ -164,7 +164,7 @@ export default function App() {
         <section id="projects" className="space-y-12">
           <div className="flex items-center gap-4">
             <Code2 className="text-brand-ink" size={24} />
-            <h2 className="text-3xl font-bold tracking-tight">Projetos</h2>
+            <h2 className="font-display text-3xl font-bold tracking-tight">Projetos</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -209,7 +209,7 @@ export default function App() {
           <div className="lg:col-span-8 space-y-12">
             <div className="flex items-center gap-4">
               <Activity className="text-brand-ink" size={24} />
-              <h2 className="text-3xl font-bold tracking-tight">Experiência Profissional</h2>
+              <h2 className="font-display text-3xl font-bold tracking-tight">Experiência Profissional</h2>
             </div>
             
             <motion.div 
@@ -230,7 +230,7 @@ export default function App() {
                 >
                   <div className="absolute -left-[5px] top-1.5 w-2 h-2 bg-brand-line group-hover:bg-brand-ink transition-colors" />
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                    <h3 className="text-xl font-bold tracking-tight">{exp.role}</h3>
+                    <h3 className="font-display text-xl font-bold tracking-tight">{exp.role}</h3>
                     <span className="font-mono text-xs text-brand-muted uppercase tracking-tighter bg-brand-line/30 px-2 py-1">
                       {exp.period}
                     </span>
@@ -250,7 +250,7 @@ export default function App() {
           <div className="lg:col-span-4 space-y-12">
             <div className="flex items-center gap-4">
               <GraduationCap className="text-brand-ink" size={24} />
-              <h2 className="text-3xl font-bold tracking-tight">Formação</h2>
+              <h2 className="font-display text-3xl font-bold tracking-tight">Formação</h2>
             </div>
             <div className="space-y-3">
               {RESUME_DATA.education.map((edu, i) => (
@@ -263,7 +263,7 @@ export default function App() {
                   <div className="font-mono text-[10px] text-brand-muted uppercase tracking-widest group-hover:text-brand-ink transition-colors">
                     {edu.period}
                   </div>
-                  <h3 className="font-bold tracking-tight leading-tight mt-1.5 group-hover:text-brand-ink transition-colors">{edu.degree}</h3>
+                  <h3 className="font-display font-bold tracking-tight leading-tight mt-1.5 group-hover:text-brand-ink transition-colors">{edu.degree}</h3>
                   <p className="text-sm text-brand-muted mt-1">{edu.institution}</p>
                 </motion.div>
               ))}
@@ -276,7 +276,7 @@ export default function App() {
             <div className="space-y-4">
               <div className="flex items-center gap-4">
                 <Zap className="text-brand-ink" size={24} />
-                <h2 className="text-4xl md:text-5xl font-bold tracking-tighter">Habilidades</h2>
+                <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tighter">Habilidades</h2>
               </div>
               <p className="text-brand-muted font-mono text-sm">Competências técnicas e linguísticas</p>
             </div>
@@ -310,7 +310,7 @@ export default function App() {
         <footer className="pt-20 md:pt-32 border-t border-brand-line">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
             <div className="space-y-8">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tighter">Vamos construir algo juntos?</h2>
+              <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tighter">Vamos construir algo juntos?</h2>
               
               <div className="space-y-6 max-w-md">
                 <p className="text-brand-muted leading-relaxed">

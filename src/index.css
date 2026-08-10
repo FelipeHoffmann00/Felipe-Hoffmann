@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -8,7 +8,7 @@
   --brand-ink: #141414;
   --brand-muted: #6B6B6B;
   --brand-line: #E2E2E1;
-  --brand-grid: rgba(20, 20, 20, 0.025);
+  --brand-grid: rgba(20, 20, 20, 0.035);
 }
 
 html.dark {
@@ -16,17 +16,26 @@ html.dark {
   --brand-ink: #F4F4F2;
   --brand-muted: #9E9E9C;
   --brand-line: #2A2A28;
-  --brand-grid: rgba(244, 244, 242, 0.018);
+  --brand-grid: rgba(244, 244, 242, 0.025);
 }
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
   --color-brand-bg: var(--brand-bg);
   --color-brand-ink: var(--brand-ink);
   --color-brand-muted: var(--brand-muted);
   --color-brand-line: var(--brand-line);
+}
+
+.font-display {
+  font-family: 'Space Grotesk', 'Inter', sans-serif !important;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace !important;
 }
 
 @layer base {
@@ -46,6 +55,9 @@ html.dark {
     font-family: var(--font-sans);
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
   }
 }
 
