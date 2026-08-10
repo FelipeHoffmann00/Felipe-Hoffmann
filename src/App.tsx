@@ -252,15 +252,20 @@ export default function App() {
               <GraduationCap className="text-brand-ink" size={24} />
               <h2 className="text-3xl font-bold tracking-tight">Formação</h2>
             </div>
-            <div className="space-y-8">
+            <div className="space-y-3">
               {RESUME_DATA.education.map((edu, i) => (
-                <div key={i} className="space-y-2">
-                  <div className="font-mono text-[10px] text-brand-muted uppercase tracking-widest">
+                <motion.div 
+                  key={i} 
+                  whileHover={{ x: 6 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="group p-4 -mx-4 border border-transparent hover:border-brand-line hover:bg-brand-line/10 transition-all cursor-default"
+                >
+                  <div className="font-mono text-[10px] text-brand-muted uppercase tracking-widest group-hover:text-brand-ink transition-colors">
                     {edu.period}
                   </div>
-                  <h3 className="font-bold tracking-tight leading-tight">{edu.degree}</h3>
-                  <p className="text-sm text-brand-muted">{edu.institution}</p>
-                </div>
+                  <h3 className="font-bold tracking-tight leading-tight mt-1.5 group-hover:text-brand-ink transition-colors">{edu.degree}</h3>
+                  <p className="text-sm text-brand-muted mt-1">{edu.institution}</p>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -274,9 +279,6 @@ export default function App() {
                 <h2 className="text-4xl md:text-5xl font-bold tracking-tighter">Habilidades</h2>
               </div>
               <p className="text-brand-muted font-mono text-sm">Competências técnicas e linguísticas</p>
-            </div>
-            <div className="text-right">
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-brand-muted opacity-50">Expertise / 2026</span>
             </div>
           </div>
 
