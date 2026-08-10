@@ -19,7 +19,8 @@ import {
   Activity,
   Zap,
   Sun,
-  Moon
+  Moon,
+  Check
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { RESUME_DATA, Experience, Project } from "./constants";
@@ -40,8 +41,46 @@ const staggerContainer = {
   }
 };
 
+const getTagColorClass = (tag: string) => {
+  const t = tag.toUpperCase().trim();
+  if (t.includes("FIREBASE")) {
+    return "group-hover:border-amber-400 group-hover:text-amber-400 group-hover:bg-amber-400/10 dark:group-hover:border-amber-600 dark:group-hover:text-amber-700";
+  }
+  if (t.includes("AI") || t.includes("IA")) {
+    return "group-hover:border-cyan-400 group-hover:text-cyan-400 group-hover:bg-cyan-400/10 dark:group-hover:border-cyan-600 dark:group-hover:text-cyan-700";
+  }
+  if (t.includes("SAAS")) {
+    return "group-hover:border-indigo-400 group-hover:text-indigo-400 group-hover:bg-indigo-400/10 dark:group-hover:border-indigo-600 dark:group-hover:text-indigo-700";
+  }
+  if (t.includes("AUTOMAÇÃO") || t.includes("AUTOMACAO")) {
+    return "group-hover:border-purple-400 group-hover:text-purple-400 group-hover:bg-purple-400/10 dark:group-hover:border-purple-600 dark:group-hover:text-purple-700";
+  }
+  if (t.includes("EXCEL")) {
+    return "group-hover:border-emerald-400 group-hover:text-emerald-400 group-hover:bg-emerald-400/10 dark:group-hover:border-emerald-600 dark:group-hover:text-emerald-700";
+  }
+  if (t.includes("DASHBOARD")) {
+    return "group-hover:border-rose-400 group-hover:text-rose-400 group-hover:bg-rose-400/10 dark:group-hover:border-rose-600 dark:group-hover:text-rose-700";
+  }
+  if (t.includes("ANÁLISE") || t.includes("ANALISE") || t.includes("DATA")) {
+    return "group-hover:border-sky-400 group-hover:text-sky-400 group-hover:bg-sky-400/10 dark:group-hover:border-sky-600 dark:group-hover:text-sky-700";
+  }
+  if (t.includes("ETL")) {
+    return "group-hover:border-fuchsia-400 group-hover:text-fuchsia-400 group-hover:bg-fuchsia-400/10 dark:group-hover:border-fuchsia-600 dark:group-hover:text-fuchsia-700";
+  }
+  return "group-hover:border-teal-400 group-hover:text-teal-400 group-hover:bg-teal-400/10 dark:group-hover:border-teal-600 dark:group-hover:text-teal-700";
+};
+
 export default function App() {
   const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(RESUME_DATA.email);
+    setCopiedEmail(true);
+    setTimeout(() => {
+      setCopiedEmail(false);
+    }, 2000);
+  };
   
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -96,11 +135,19 @@ export default function App() {
             
             <button
               onClick={toggleTheme}
-              className="p-2 border border-brand-line hover:border-brand-ink text-brand-ink transition-all flex items-center justify-center rounded-none ml-1 sm:ml-2"
+              className={`p-2 border border-brand-line transition-all flex items-center justify-center rounded-none ml-1 sm:ml-2 group ${
+                isDark 
+                  ? "hover:border-amber-500/50 hover:bg-amber-500/10" 
+                  : "hover:border-purple-500/50 hover:bg-purple-500/10"
+              }`}
               aria-label={isDark ? "Ativar Modo Claro" : "Ativar Modo Escuro"}
               title={isDark ? "Modo Claro" : "Modo Escuro"}
             >
-              {isDark ? <Sun size={15} /> : <Moon size={15} />}
+              {isDark ? (
+                <Sun size={15} className="text-amber-400 group-hover:rotate-45 transition-transform duration-300" />
+              ) : (
+                <Moon size={15} className="text-purple-700 dark:text-purple-400 group-hover:-rotate-12 transition-transform duration-300" />
+              )}
             </button>
           </div>
         </div>
@@ -127,10 +174,37 @@ export default function App() {
 
             <div className="flex flex-wrap gap-6 items-center text-sm font-mono text-brand-muted">
               <div className="flex items-center gap-2">
-                <MapPin size={16} /> {RESUME_DATA.location}
+                <MapPin size={16} className="text-rose-500 dark:text-rose-400 shrink-0" /> {RESUME_DATA.location}
               </div>
-              <div className="flex items-center gap-2">
-                <Mail size={16} /> {RESUME_DATA.email}
+              <div className="relative group inline-block">
+                <button
+                  onClick={handleCopyEmail}
+                  className="flex items-center gap-2 hover:text-blue-500 dark:hover:text-blue-400 transition-colors cursor-pointer text-left"
+                  aria-label="Copiar e-mail"
+                >
+                  <Mail size={16} className="text-sky-500 dark:text-sky-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 shrink-0 transition-colors" />
+                  <span>{RESUME_DATA.email}</span>
+                </button>
+
+                <div 
+                  className={`absolute left-1/2 -translate-x-1/2 -top-7 pointer-events-none transition-all duration-200 z-30 whitespace-nowrap ${
+                    copiedEmail ? "opacity-100 scale-100" : "opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100"
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono transition-colors">
+                    {copiedEmail ? (
+                      <>
+                        <Check size={13} className="text-green-600 dark:text-[#00FF66] shrink-0" />
+                        <span className="text-green-600 dark:text-[#00FF66] font-medium">copiado para a área de transferência!</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-zinc-900 dark:bg-white animate-pulse" />
+                        <span className="text-zinc-900 dark:text-white font-medium">clique para copiar</span>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -150,20 +224,28 @@ export default function App() {
                 />
               </div>
 
-              <div className="w-full py-2.5 px-3 rounded-none border border-brand-ink/60 dark:border-white/40 bg-transparent flex items-center justify-center gap-2 font-mono text-xs text-brand-ink">
+              <button
+                onClick={() => {
+                  const contactElem = document.getElementById('contact');
+                  if (contactElem) {
+                    contactElem.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="w-full py-2.5 px-3 rounded-none border border-brand-ink/60 dark:border-white/40 hover:border-green-500 dark:hover:border-[#00FF66] hover:bg-green-500/10 dark:hover:bg-[#00FF66]/10 transition-all flex items-center justify-center gap-2 font-mono text-xs text-brand-ink group cursor-pointer"
+              >
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 dark:bg-[#00FF66]"></span>
                 </span>
-                <span className="font-normal text-brand-ink tracking-tight">Disponível para novos projetos</span>
-              </div>
+                <span className="font-normal text-brand-ink group-hover:text-green-600 dark:group-hover:text-[#00FF66] transition-colors tracking-tight">Disponível para novos projetos</span>
+              </button>
             </div>
           </div>
         </motion.section>
 
         <section id="projects" className="space-y-12">
           <div className="flex items-center gap-4">
-            <Code2 className="text-brand-ink" size={24} />
+            <Code2 className="text-indigo-500 dark:text-indigo-400" size={24} />
             <h2 className="font-display text-3xl font-bold tracking-tight">Projetos</h2>
           </div>
 
@@ -177,9 +259,9 @@ export default function App() {
                 whileHover={{ y: -8, x: 8 }}
                 transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
                 viewport={{ once: true }}
-                className="group p-6 md:p-8 border-2 border-brand-ink transition-colors duration-300 space-y-6 cursor-default bg-brand-bg hover:bg-brand-ink"
+                className="group p-6 md:p-8 border-2 border-brand-ink transition-colors duration-300 flex flex-col justify-between cursor-default bg-brand-bg hover:bg-brand-ink h-full"
               >
-                <div className="space-y-3">
+                <div className="space-y-3 mb-6">
                   <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-muted group-hover:text-brand-bg/50 transition-colors">
                     Projeto 0{i + 1}
                   </div>
@@ -191,9 +273,9 @@ export default function App() {
                   </p>
                 </div>
                 {project.tags && (
-                  <div className="flex flex-wrap gap-2 pt-2">
+                  <div className="flex flex-wrap gap-2 mt-auto pt-2">
                     {project.tags.map((tag: string) => (
-                      <span key={tag} className="text-[9px] font-mono uppercase tracking-widest px-2 py-1 border border-brand-line group-hover:border-brand-bg/30 group-hover:text-brand-bg transition-all">
+                      <span key={tag} className={`text-[9px] font-mono uppercase tracking-widest px-2 py-1 border border-brand-line transition-all ${getTagColorClass(tag)}`}>
                         {tag}
                       </span>
                     ))}
@@ -208,7 +290,7 @@ export default function App() {
         <section id="experience" className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           <div className="lg:col-span-8 space-y-12">
             <div className="flex items-center gap-4">
-              <Activity className="text-brand-ink" size={24} />
+              <Activity className="text-green-500 dark:text-[#00FF66]" size={24} />
               <h2 className="font-display text-3xl font-bold tracking-tight">Experiência Profissional</h2>
             </div>
             
@@ -226,9 +308,9 @@ export default function App() {
                   whileHover={{ x: 10 }}
                   transition={{ duration: 0.2, ease: "easeOut" }}
                   onClick={() => setSelectedExperience(exp)}
-                  className="group relative pl-8 border-l border-brand-line space-y-3 hover:border-brand-ink transition-colors cursor-pointer"
+                  className="group relative pl-8 border-l border-brand-line space-y-3 hover:border-green-500 dark:hover:border-[#00FF66] transition-colors cursor-pointer"
                 >
-                  <div className="absolute -left-[5px] top-1.5 w-2 h-2 bg-brand-line group-hover:bg-brand-ink transition-colors" />
+                  <div className="absolute -left-[5px] top-1.5 w-2 h-2 bg-brand-line group-hover:bg-green-500 dark:group-hover:bg-[#00FF66] transition-colors" />
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                     <h3 className="font-display text-xl font-bold tracking-tight">{exp.role}</h3>
                     <span className="font-mono text-xs text-brand-muted uppercase tracking-tighter bg-brand-line/30 px-2 py-1">
@@ -239,7 +321,7 @@ export default function App() {
                   <p className="text-brand-muted leading-relaxed max-w-3xl line-clamp-2">
                     {exp.description}
                   </p>
-                  <div className="flex items-center gap-2 text-[10px] font-mono text-brand-muted uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex items-center gap-2 text-[10px] font-mono text-green-600 dark:text-[#00FF66] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
                     Ver detalhes <ChevronRight size={10} />
                   </div>
                 </motion.div>
@@ -249,7 +331,7 @@ export default function App() {
 
           <div className="lg:col-span-4 space-y-12">
             <div className="flex items-center gap-4">
-              <GraduationCap className="text-brand-ink" size={24} />
+              <GraduationCap className="text-amber-500 dark:text-amber-400" size={24} />
               <h2 className="font-display text-3xl font-bold tracking-tight">Formação</h2>
             </div>
             <div className="space-y-3">
@@ -258,12 +340,12 @@ export default function App() {
                   key={i} 
                   whileHover={{ x: 6 }}
                   transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="group p-4 -mx-4 border border-transparent hover:border-brand-line hover:bg-brand-line/10 transition-all cursor-default"
+                  className="group p-4 -mx-4 border border-transparent hover:border-amber-500/40 hover:bg-amber-500/10 transition-all cursor-default"
                 >
-                  <div className="font-mono text-[10px] text-brand-muted uppercase tracking-widest group-hover:text-brand-ink transition-colors">
+                  <div className="font-mono text-[10px] text-brand-muted uppercase tracking-widest group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                     {edu.period}
                   </div>
-                  <h3 className="font-display font-bold tracking-tight leading-tight mt-1.5 group-hover:text-brand-ink transition-colors">{edu.degree}</h3>
+                  <h3 className="font-display font-bold tracking-tight leading-tight mt-1.5 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">{edu.degree}</h3>
                   <p className="text-sm text-brand-muted mt-1">{edu.institution}</p>
                 </motion.div>
               ))}
@@ -275,7 +357,7 @@ export default function App() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-brand-line pb-8">
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                <Zap className="text-brand-ink" size={24} />
+                <Zap className="text-violet-500 dark:text-violet-400" size={24} />
                 <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tighter">Habilidades</h2>
               </div>
               <p className="text-brand-muted font-mono text-sm">Competências técnicas e linguísticas</p>
@@ -294,10 +376,10 @@ export default function App() {
                     .map(skill => (
                       <div 
                         key={skill.name}
-                        className="group flex items-center gap-2 px-3 py-2 border border-brand-line hover:border-brand-ink transition-all cursor-default"
+                        className="group flex items-center gap-2 px-3 py-2 border border-brand-line hover:border-violet-500/50 hover:bg-violet-500/10 transition-all cursor-default"
                       >
-                        <ChevronRight size={12} className="text-brand-muted group-hover:text-brand-ink group-hover:translate-x-1 transition-all" />
-                        <span className="text-sm font-medium tracking-tight">{skill.name}</span>
+                        <ChevronRight size={12} className="text-brand-muted group-hover:text-violet-500 dark:group-hover:text-violet-400 group-hover:translate-x-1 transition-all" />
+                        <span className="text-sm font-medium tracking-tight group-hover:text-violet-600 dark:group-hover:text-violet-300 transition-colors">{skill.name}</span>
                       </div>
                     ))}
                 </div>
@@ -307,7 +389,7 @@ export default function App() {
         </section>
 
         {/* FOOTER / CONTACT */}
-        <footer className="pt-20 md:pt-32 border-t border-brand-line">
+        <footer id="contact" className="pt-20 md:pt-32 border-t border-brand-line">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
             <div className="space-y-8">
               <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tighter">Vamos construir algo juntos?</h2>
@@ -323,20 +405,26 @@ export default function App() {
                   href={RESUME_DATA.social.linkedin} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="p-4 border border-brand-line hover:bg-brand-ink hover:text-brand-bg transition-all"
+                  className="relative p-4 border border-brand-line hover:border-blue-500/50 hover:bg-blue-500/10 transition-all group"
                   aria-label="LinkedIn"
                 >
-                  <Linkedin size={20} />
+                  <Linkedin size={20} className="text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform" />
+                  <span className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-[1200ms] pointer-events-none text-[10px] font-mono tracking-wider text-brand-muted dark:text-zinc-400 bg-brand-bg/90 border border-brand-line px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
+                    LinkedIn
+                  </span>
                 </a>
                 {RESUME_DATA.social.github && (
                   <a 
                     href={RESUME_DATA.social.github} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="p-4 border border-brand-line hover:bg-brand-ink hover:text-brand-bg transition-all"
+                    className="relative p-4 border border-brand-line hover:border-purple-500/50 hover:bg-purple-500/10 transition-all group"
                     aria-label="GitHub"
                   >
-                    <Github size={20} />
+                    <Github size={20} className="text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform" />
+                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-[1200ms] pointer-events-none text-[10px] font-mono tracking-wider text-brand-muted dark:text-zinc-400 bg-brand-bg/90 border border-brand-line px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
+                      GitHub
+                    </span>
                   </a>
                 )}
                 {RESUME_DATA.social.twitter && (
@@ -344,10 +432,13 @@ export default function App() {
                     href={RESUME_DATA.social.twitter} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="p-4 border border-brand-line hover:bg-brand-ink hover:text-brand-bg transition-all"
+                    className="relative p-4 border border-brand-line hover:border-sky-500/50 hover:bg-sky-500/10 transition-all group"
                     aria-label="Twitter"
                   >
-                    <Twitter size={20} />
+                    <Twitter size={20} className="text-sky-500 dark:text-sky-400 group-hover:scale-110 transition-transform" />
+                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-[1200ms] pointer-events-none text-[10px] font-mono tracking-wider text-brand-muted dark:text-zinc-400 bg-brand-bg/90 border border-brand-line px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
+                      Twitter
+                    </span>
                   </a>
                 )}
               </div>

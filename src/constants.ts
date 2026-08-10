@@ -123,7 +123,7 @@ export const RESUME_DATA = {
     {
       title: "Integração de dados para análise e tomada de decisão",
       description: "Pipeline de dados estruturado para coletar informações de múltiplas fontes, transformá-las e gerar relatórios estratégicos para o negócio.",
-      tags: ["Data Analysis", "BI", "ETL"]
+      tags: ["Análise de Dados", "ETL"]
     }
   ] as Project[]
 };
