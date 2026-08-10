@@ -85,13 +85,9 @@ export default function App() {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="flex items-center gap-2 font-mono text-xs font-semibold tracking-wider uppercase text-brand-ink hover:opacity-70 transition-opacity cursor-pointer"
+            className="font-mono text-xs font-semibold tracking-wider uppercase text-brand-ink hover:opacity-70 transition-opacity cursor-pointer"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span>FELIPE HOFFMANN</span>
+            FELIPE HOFFMANN
           </a>
           <div className="flex gap-4 sm:gap-6 items-center">
             <a href="#projects" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">Projetos</a>
