@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Send, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { ResumeData } from '../constants';
 
-export const ContactForm: React.FC = () => {
+interface ContactFormProps {
+  content: ResumeData['contactForm'];
+}
+
+export const ContactForm: React.FC<ContactFormProps> = ({ content }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -46,15 +51,15 @@ export const ContactForm: React.FC = () => {
 
       if (data.success) {
         setStatus('success');
-        setResponseMsg('Mensagem enviada com sucesso! Em breve entrarei em contato.');
+        setResponseMsg(content.successMessage);
         setFormData({ name: '', email: '', phone: '', message: '' });
       } else {
         setStatus('error');
-        setResponseMsg(data.message || 'Ocorreu um erro ao enviar a mensagem. Tente novamente.');
+        setResponseMsg(data.message || content.errorMessage);
       }
     } catch {
       setStatus('error');
-      setResponseMsg('Falha de conexão. Por favor, tente novamente mais tarde.');
+      setResponseMsg(content.connectionErrorMessage);
     }
   };
 
@@ -62,10 +67,10 @@ export const ContactForm: React.FC = () => {
     <div className="bg-brand-bg border border-brand-line p-6 md:p-8 space-y-6">
       <div className="space-y-1">
         <h3 className="font-mono text-xs uppercase tracking-widest text-brand-muted">
-          Envie uma Mensagem
+          {content.title}
         </h3>
         <p className="text-sm text-brand-ink font-semibold">
-          Preencha o formulário abaixo
+          {content.subtitle}
         </p>
       </div>
 
@@ -73,7 +78,7 @@ export const ContactForm: React.FC = () => {
         {/* Name Input */}
         <div className="space-y-1.5">
           <label htmlFor="name" className="block text-xs font-mono uppercase tracking-wider text-brand-muted">
-            Nome <span className="text-red-500">*</span>
+            {content.nameLabel} <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -82,7 +87,7 @@ export const ContactForm: React.FC = () => {
             required
             value={formData.name}
             onChange={handleChange}
-            placeholder="Seu nome completo"
+            placeholder={content.namePlaceholder}
             className="w-full px-4 py-3 bg-transparent border border-brand-line text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans"
           />
         </div>
@@ -91,7 +96,7 @@ export const ContactForm: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label htmlFor="email" className="block text-xs font-mono uppercase tracking-wider text-brand-muted">
-              E-mail <span className="text-red-500">*</span>
+              {content.emailLabel} <span className="text-red-500">*</span>
             </label>
             <input
               type="email"
@@ -100,14 +105,14 @@ export const ContactForm: React.FC = () => {
               required
               value={formData.email}
               onChange={handleChange}
-              placeholder="seu@email.com"
+              placeholder={content.emailPlaceholder}
               className="w-full px-4 py-3 bg-transparent border border-brand-line text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans"
             />
           </div>
 
           <div className="space-y-1.5">
             <label htmlFor="phone" className="block text-xs font-mono uppercase tracking-wider text-brand-muted">
-              Telefone
+              {content.phoneLabel}
             </label>
             <input
               type="tel"
@@ -115,7 +120,7 @@ export const ContactForm: React.FC = () => {
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              placeholder="(19) 99999-9999"
+              placeholder={content.phonePlaceholder}
               className="w-full px-4 py-3 bg-transparent border border-brand-line text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans"
             />
           </div>
@@ -124,7 +129,7 @@ export const ContactForm: React.FC = () => {
         {/* Message Input */}
         <div className="space-y-1.5">
           <label htmlFor="message" className="block text-xs font-mono uppercase tracking-wider text-brand-muted">
-            Mensagem <span className="text-red-500">*</span>
+            {content.messageLabel} <span className="text-red-500">*</span>
           </label>
           <textarea
             id="message"
@@ -133,22 +138,22 @@ export const ContactForm: React.FC = () => {
             rows={4}
             value={formData.message}
             onChange={handleChange}
-            placeholder="Vamos iniciar nossa conversa!"
+            placeholder={content.messagePlaceholder}
             className="w-full px-4 py-3 bg-transparent border border-brand-line text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans resize-none"
           />
         </div>
 
         {/* Feedback Messages */}
         {status === 'success' && (
-          <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 text-xs font-mono">
-            <CheckCircle2 size={16} className="shrink-0 text-emerald-600" />
+          <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 text-xs font-mono">
+            <CheckCircle2 size={16} className="shrink-0 text-emerald-600 dark:text-emerald-400" />
             <span>{responseMsg}</span>
           </div>
         )}
 
         {status === 'error' && (
-          <div className="flex items-center gap-2 p-3 bg-rose-500/10 border border-rose-500/30 text-rose-700 text-xs font-mono">
-            <AlertCircle size={16} className="shrink-0 text-rose-600" />
+          <div className="flex items-center gap-2 p-3 bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-400 text-xs font-mono">
+            <AlertCircle size={16} className="shrink-0 text-rose-600 dark:text-rose-400" />
             <span>{responseMsg}</span>
           </div>
         )}
@@ -162,12 +167,12 @@ export const ContactForm: React.FC = () => {
           {status === 'loading' ? (
             <>
               <Loader2 size={16} className="animate-spin" />
-              <span>Enviando...</span>
+              <span>{content.sendingButton}</span>
             </>
           ) : (
             <>
               <Send size={16} />
-              <span>Enviar Mensagem</span>
+              <span>{content.sendButton}</span>
             </>
           )}
         </button>
@@ -175,3 +180,4 @@ export const ContactForm: React.FC = () => {
     </div>
   );
 };
+
