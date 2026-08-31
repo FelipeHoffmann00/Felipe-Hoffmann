@@ -89,7 +89,7 @@ export const RESUME_DATA = {
   ] as Education[],
   skills: [
     { name: "JavaScript", category: "Technical" },
-    { name: "C#", category: "Technical" },
+    { name: "Python", category: "Technical" },
     { name: "C", category: "Technical" },
     { name: "SQL", category: "Technical" },
     { name: "Firebase", category: "Technical" },
