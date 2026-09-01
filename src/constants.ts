@@ -61,6 +61,7 @@ export interface ResumeData {
     contactDescription: string;
     viewDetails: string;
     projectPrefix: string;
+    visitWebsite: string;
     modal: {
       description: string;
       technologies: string;
@@ -129,6 +130,7 @@ export const RESUME_DATA_BY_LANG: Record<'pt' | 'en', ResumeData> = {
       contactDescription: "Estou sempre aberto a novos projetos, oportunidades e parcerias. Preencha o formulário ao lado para me enviar uma mensagem diretamente.",
       viewDetails: "Ver detalhes",
       projectPrefix: "Projeto",
+      visitWebsite: "Acessar website",
       modal: {
         description: "Descrição",
         technologies: "Tecnologias",
@@ -202,6 +204,11 @@ export const RESUME_DATA_BY_LANG: Record<'pt' | 'en', ResumeData> = {
         institution: "SENAI de Sumaré",
         degree: "Técnico em Eletromecânica",
         period: "2018 — 2019"
+      },
+      {
+        institution: "SENAI de Sumaré",
+        degree: "Criação de Página Web (120h)",
+        period: "2024"
       }
     ],
     skills: [
@@ -228,9 +235,15 @@ export const RESUME_DATA_BY_LANG: Record<'pt' | 'en', ResumeData> = {
     },
     projects: [
       {
-        title: "Desenvolvimento de sistema SaaS para gestão de times (Firebase + IA)",
-        description: "Criação de plataforma completa para gerenciamento de equipes, integrando banco de dados em tempo real e inteligência artificial para otimização de fluxos.",
-        tags: ["Firebase", "AI", "SaaS"]
+        title: "Site Interativo com Painel Administrativo — Fuzzi Esquadrias",
+        description: "Desenvolvimento de website responsivo e interativo para a loja Fuzzi Esquadrias, integrando Supabase para armazenamento em nuvem de imagens e dados, hospedado no Registro.br. Conta com fotos de esquadrias, catálogo de trabalhos e depoimentos de clientes, além de um painel de administração (CMS) completo para adicionar/excluir comentários, gerenciar projetos em destaque e alterar dinamicamente a foto da home.",
+        link: "https://www.fuzziesquadrias.com.br/",
+        tags: ["JavaScript", "Supabase", "CMS / Admin", "Registro.br"]
+      },
+      {
+        title: "Desenvolvimento de sistema SaaS para gestão de times (Google AI Studio + Firebase)",
+        description: "Plataforma SaaS completa para gestão e colaboração de equipes, desenvolvida com integração ao Google AI Studio para maior praticidade e aceleração no desenvolvimento de inteligência artificial. Utiliza o Google Firebase para autenticação e armazenamento de dados em tempo real, além de contar com arquitetura robusta de controle de acesso (RBAC) com diferentes níveis de permissão para administradores e times.",
+        tags: ["Google AI Studio", "Google Firebase", "SaaS", "Níveis de Acesso (RBAC)"]
       },
       {
         title: "Automação de processos e criação de planilhas inteligentes",
@@ -276,6 +289,7 @@ export const RESUME_DATA_BY_LANG: Record<'pt' | 'en', ResumeData> = {
       contactDescription: "I am always open to new projects, opportunities, and partnerships. Fill out the form to send me a direct message.",
       viewDetails: "View details",
       projectPrefix: "Project",
+      visitWebsite: "Visit website",
       modal: {
         description: "Description",
         technologies: "Technologies",
@@ -349,6 +363,11 @@ export const RESUME_DATA_BY_LANG: Record<'pt' | 'en', ResumeData> = {
         institution: "SENAI de Sumaré",
         degree: "Vocational Technical Degree in Electromechanics",
         period: "2018 — 2019"
+      },
+      {
+        institution: "SENAI de Sumaré",
+        degree: "Web Page Development (120h)",
+        period: "2024"
       }
     ],
     skills: [
@@ -375,9 +394,15 @@ export const RESUME_DATA_BY_LANG: Record<'pt' | 'en', ResumeData> = {
     },
     projects: [
       {
-        title: "SaaS Platform Development for Team Management (Firebase + AI)",
-        description: "End-to-end team management platform development, integrating real-time databases and artificial intelligence for workflow optimization.",
-        tags: ["Firebase", "AI", "SaaS"]
+        title: "Interactive Website with Custom Admin CMS — Fuzzi Esquadrias",
+        description: "Full-stack development of a responsive, interactive website for Fuzzi Esquadrias store, integrating Supabase for cloud image storage and database management, hosted via Registro.br. Features custom product showcases, project galleries, and customer reviews, backed by a dedicated Admin Dashboard (CMS) enabling live review moderation, featured project curation, and homepage hero banner customization.",
+        link: "https://www.fuzziesquadrias.com.br/",
+        tags: ["JavaScript", "Supabase", "CMS / Admin", "Registro.br"]
+      },
+      {
+        title: "SaaS Team Management Platform (Google AI Studio + Firebase)",
+        description: "Comprehensive SaaS platform for team management and workflow orchestration, built with Google AI Studio integration for streamlined development efficiency and intelligent automation. Powered by Google Firebase for real-time data storage and authentication, featuring multi-tenant role-based access control (RBAC) with differentiated permission levels for administrators and team members.",
+        tags: ["Google AI Studio", "Google Firebase", "SaaS", "Role-Based Access (RBAC)"]
       },
       {
         title: "Process Automation & Smart Spreadsheets Architecture",

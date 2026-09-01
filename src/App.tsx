@@ -44,31 +44,46 @@ const staggerContainer = {
 
 const getTagColorClass = (tag: string) => {
   const t = tag.toUpperCase().trim();
+  if (t.includes("SUPABASE")) {
+    return "group-hover:border-emerald-400 group-hover:text-emerald-400 group-hover:bg-emerald-400/10 dark:group-hover:border-emerald-700 dark:group-hover:text-emerald-900 dark:group-hover:bg-emerald-700/15";
+  }
+  if (t.includes("STUDIO") || t.includes("GOOGLE AI")) {
+    return "group-hover:border-blue-400 group-hover:text-blue-400 group-hover:bg-blue-400/10 dark:group-hover:border-blue-700 dark:group-hover:text-blue-900 dark:group-hover:bg-blue-700/15";
+  }
   if (t.includes("FIREBASE")) {
-    return "group-hover:border-amber-400 group-hover:text-amber-400 group-hover:bg-amber-400/10 dark:group-hover:border-amber-600 dark:group-hover:text-amber-700";
+    return "group-hover:border-amber-400 group-hover:text-amber-400 group-hover:bg-amber-400/10 dark:group-hover:border-amber-700 dark:group-hover:text-amber-900 dark:group-hover:bg-amber-700/15";
+  }
+  if (t.includes("RBAC") || t.includes("ACESSO") || t.includes("ACCESS")) {
+    return "group-hover:border-violet-400 group-hover:text-violet-400 group-hover:bg-violet-400/10 dark:group-hover:border-violet-700 dark:group-hover:text-violet-900 dark:group-hover:bg-violet-700/15";
   }
   if (t.includes("AI") || t.includes("IA")) {
-    return "group-hover:border-cyan-400 group-hover:text-cyan-400 group-hover:bg-cyan-400/10 dark:group-hover:border-cyan-600 dark:group-hover:text-cyan-700";
+    return "group-hover:border-cyan-400 group-hover:text-cyan-400 group-hover:bg-cyan-400/10 dark:group-hover:border-cyan-700 dark:group-hover:text-cyan-900 dark:group-hover:bg-cyan-700/15";
   }
-  if (t.includes("SAAS")) {
-    return "group-hover:border-indigo-400 group-hover:text-indigo-400 group-hover:bg-indigo-400/10 dark:group-hover:border-indigo-600 dark:group-hover:text-indigo-700";
+  if (t.includes("SAAS") || t.includes("CMS") || t.includes("ADMIN")) {
+    return "group-hover:border-indigo-400 group-hover:text-indigo-400 group-hover:bg-indigo-400/10 dark:group-hover:border-indigo-700 dark:group-hover:text-indigo-900 dark:group-hover:bg-indigo-700/15";
   }
   if (t.includes("AUTOMAÇÃO") || t.includes("AUTOMACAO") || t.includes("AUTOMATION")) {
-    return "group-hover:border-purple-400 group-hover:text-purple-400 group-hover:bg-purple-400/10 dark:group-hover:border-purple-600 dark:group-hover:text-purple-700";
+    return "group-hover:border-purple-400 group-hover:text-purple-400 group-hover:bg-purple-400/10 dark:group-hover:border-purple-700 dark:group-hover:text-purple-900 dark:group-hover:bg-purple-700/15";
   }
   if (t.includes("EXCEL")) {
-    return "group-hover:border-emerald-400 group-hover:text-emerald-400 group-hover:bg-emerald-400/10 dark:group-hover:border-emerald-600 dark:group-hover:text-emerald-700";
+    return "group-hover:border-emerald-400 group-hover:text-emerald-400 group-hover:bg-emerald-400/10 dark:group-hover:border-emerald-700 dark:group-hover:text-emerald-900 dark:group-hover:bg-emerald-700/15";
+  }
+  if (t.includes("REGISTRO")) {
+    return "group-hover:border-teal-400 group-hover:text-teal-400 group-hover:bg-teal-400/10 dark:group-hover:border-teal-700 dark:group-hover:text-teal-900 dark:group-hover:bg-teal-700/15";
+  }
+  if (t.includes("JAVASCRIPT") || t.includes("JS")) {
+    return "group-hover:border-yellow-400 group-hover:text-yellow-400 group-hover:bg-yellow-400/10 dark:group-hover:border-amber-700 dark:group-hover:text-amber-900 dark:group-hover:bg-amber-600/15";
   }
   if (t.includes("DASHBOARD")) {
-    return "group-hover:border-rose-400 group-hover:text-rose-400 group-hover:bg-rose-400/10 dark:group-hover:border-rose-600 dark:group-hover:text-rose-700";
+    return "group-hover:border-rose-400 group-hover:text-rose-400 group-hover:bg-rose-400/10 dark:group-hover:border-rose-700 dark:group-hover:text-rose-900 dark:group-hover:bg-rose-700/15";
   }
   if (t.includes("ANÁLISE") || t.includes("ANALISE") || t.includes("ANALYTICS") || t.includes("DATA")) {
-    return "group-hover:border-sky-400 group-hover:text-sky-400 group-hover:bg-sky-400/10 dark:group-hover:border-sky-600 dark:group-hover:text-sky-700";
+    return "group-hover:border-sky-400 group-hover:text-sky-400 group-hover:bg-sky-400/10 dark:group-hover:border-sky-700 dark:group-hover:text-sky-900 dark:group-hover:bg-sky-700/15";
   }
   if (t.includes("ETL")) {
-    return "group-hover:border-fuchsia-400 group-hover:text-fuchsia-400 group-hover:bg-fuchsia-400/10 dark:group-hover:border-fuchsia-600 dark:group-hover:text-fuchsia-700";
+    return "group-hover:border-fuchsia-400 group-hover:text-fuchsia-400 group-hover:bg-fuchsia-400/10 dark:group-hover:border-fuchsia-700 dark:group-hover:text-fuchsia-900 dark:group-hover:bg-fuchsia-700/15";
   }
-  return "group-hover:border-teal-400 group-hover:text-teal-400 group-hover:bg-teal-400/10 dark:group-hover:border-teal-600 dark:group-hover:text-teal-700";
+  return "group-hover:border-teal-400 group-hover:text-teal-400 group-hover:bg-teal-400/10 dark:group-hover:border-zinc-700 dark:group-hover:text-zinc-900 dark:group-hover:bg-zinc-700/15";
 };
 
 export default function App() {
@@ -314,7 +329,7 @@ export default function App() {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {resumeData.projects.map((project: Project, i: number) => (
                   <motion.div
                     key={i}
@@ -327,8 +342,27 @@ export default function App() {
                     className="group p-6 md:p-8 border-2 border-brand-ink transition-colors duration-300 flex flex-col justify-between cursor-default bg-brand-bg hover:bg-brand-ink h-full"
                   >
                     <div className="space-y-3 mb-6">
-                      <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-muted group-hover:text-brand-bg/50 transition-colors">
-                        {resumeData.sections.projectPrefix} 0{i + 1}
+                      <div className="flex items-center justify-between">
+                        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-muted group-hover:text-brand-bg/50 transition-colors">
+                          {resumeData.sections.projectPrefix} 0{i + 1}
+                        </div>
+                        {project.link && (
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-[11px] font-mono font-medium text-emerald-600 dark:text-[#00FF66] group-hover:text-brand-bg hover:underline transition-colors cursor-pointer"
+                            onClick={(e) => e.stopPropagation()}
+                            title={resumeData.sections.visitWebsite}
+                          >
+                            <span className="relative flex h-2 w-2">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 dark:bg-[#00FF66]"></span>
+                            </span>
+                            <span>Live</span>
+                            <ExternalLink size={12} />
+                          </a>
+                        )}
                       </div>
                       <h3 className="text-xl font-bold tracking-tight group-hover:text-brand-bg transition-colors">
                         {project.title}
@@ -337,15 +371,35 @@ export default function App() {
                         {project.description}
                       </p>
                     </div>
-                    {project.tags && (
-                      <div className="flex flex-wrap gap-2 mt-auto pt-2">
-                        {project.tags.map((tag: string) => (
-                          <span key={tag} className={`text-[9px] font-mono uppercase tracking-widest px-2 py-1 border border-brand-line transition-all ${getTagColorClass(tag)}`}>
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+
+                    <div className="mt-auto space-y-4 pt-2">
+                      {project.tags && (
+                        <div className="flex flex-wrap gap-2">
+                          {project.tags.map((tag: string) => (
+                            <span key={tag} className={`text-[9px] font-mono font-semibold uppercase tracking-widest px-2 py-1 border border-brand-line text-brand-muted dark:text-zinc-400 bg-brand-bg/50 transition-all ${getTagColorClass(tag)}`}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {project.link && (
+                        <div className="pt-3 border-t border-brand-line/50 group-hover:border-brand-bg/20">
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-between w-full text-xs font-mono tracking-wider font-semibold text-brand-ink group-hover:text-brand-bg hover:text-emerald-600 dark:hover:text-[#00FF66] transition-colors cursor-pointer"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <span className="flex items-center gap-2">
+                              <span>{resumeData.sections.visitWebsite}</span>
+                            </span>
+                            <ExternalLink size={14} className="shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                          </a>
+                        </div>
+                      )}
+                    </div>
                   </motion.div>
                 ))}
               </div>
