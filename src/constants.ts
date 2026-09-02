@@ -42,9 +42,11 @@ export interface ResumeData {
     copied: string;
   };
   nav: {
+    home: string;
     projects: string;
     experience: string;
     skills: string;
+    contact: string;
   };
   sections: {
     projects: string;
@@ -60,6 +62,8 @@ export interface ResumeData {
     contactTitle: string;
     contactDescription: string;
     viewDetails: string;
+    viewDescription: string;
+    hideDescription: string;
     projectPrefix: string;
     visitWebsite: string;
     modal: {
@@ -111,9 +115,11 @@ export const RESUME_DATA_BY_LANG: Record<'pt' | 'en', ResumeData> = {
       copied: "copiado para a área de transferência!"
     },
     nav: {
+      home: "Início",
       projects: "Projetos",
       experience: "Experiência",
-      skills: "Habilidades"
+      skills: "Habilidades",
+      contact: "Contato"
     },
     sections: {
       projects: "Projetos",
@@ -129,6 +135,8 @@ export const RESUME_DATA_BY_LANG: Record<'pt' | 'en', ResumeData> = {
       contactTitle: "Vamos construir algo juntos?",
       contactDescription: "Estou sempre aberto a novos projetos, oportunidades e parcerias. Preencha o formulário ao lado para me enviar uma mensagem diretamente.",
       viewDetails: "Ver detalhes",
+      viewDescription: "Ver descrição",
+      hideDescription: "Ocultar descrição",
       projectPrefix: "Projeto",
       visitWebsite: "Acessar website",
       modal: {
@@ -270,9 +278,11 @@ export const RESUME_DATA_BY_LANG: Record<'pt' | 'en', ResumeData> = {
       copied: "copied to clipboard!"
     },
     nav: {
+      home: "Home",
       projects: "Projects",
       experience: "Experience",
-      skills: "Skills"
+      skills: "Skills",
+      contact: "Contact"
     },
     sections: {
       projects: "Projects",
@@ -288,6 +298,8 @@ export const RESUME_DATA_BY_LANG: Record<'pt' | 'en', ResumeData> = {
       contactTitle: "Let's build something together?",
       contactDescription: "I am always open to new projects, opportunities, and partnerships. Fill out the form to send me a direct message.",
       viewDetails: "View details",
+      viewDescription: "View description",
+      hideDescription: "Hide description",
       projectPrefix: "Project",
       visitWebsite: "Visit website",
       modal: {

@@ -2,5 +2,5 @@
   "name": "Portfólio | Felipe Hoffmann",
   "description": "Um site de portfólio moderno, minimalista e profissional inspirado no design suíço para destacar seu currículo.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

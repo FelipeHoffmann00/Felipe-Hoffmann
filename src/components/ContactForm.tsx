@@ -88,7 +88,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ content }) => {
             value={formData.name}
             onChange={handleChange}
             placeholder={content.namePlaceholder}
-            className="w-full px-4 py-3 bg-transparent border border-brand-line text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans"
+            className="w-full px-4 py-3.5 md:py-3 bg-transparent border border-brand-line text-base md:text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans"
           />
         </div>
 
@@ -106,7 +106,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ content }) => {
               value={formData.email}
               onChange={handleChange}
               placeholder={content.emailPlaceholder}
-              className="w-full px-4 py-3 bg-transparent border border-brand-line text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans"
+              className="w-full px-4 py-3.5 md:py-3 bg-transparent border border-brand-line text-base md:text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans"
             />
           </div>
 
@@ -121,7 +121,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ content }) => {
               value={formData.phone}
               onChange={handleChange}
               placeholder={content.phonePlaceholder}
-              className="w-full px-4 py-3 bg-transparent border border-brand-line text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans"
+              className="w-full px-4 py-3.5 md:py-3 bg-transparent border border-brand-line text-base md:text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans"
             />
           </div>
         </div>
@@ -139,7 +139,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ content }) => {
             value={formData.message}
             onChange={handleChange}
             placeholder={content.messagePlaceholder}
-            className="w-full px-4 py-3 bg-transparent border border-brand-line text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans resize-none"
+            className="w-full px-4 py-3.5 md:py-3 bg-transparent border border-brand-line text-base md:text-sm text-brand-ink focus:outline-none focus:border-brand-ink transition-colors placeholder:text-brand-muted/50 font-sans resize-none"
           />
         </div>
 

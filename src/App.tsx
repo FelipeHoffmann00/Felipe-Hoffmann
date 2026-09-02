@@ -12,6 +12,7 @@ import {
   Github, 
   Twitter, 
   ChevronRight,
+  ChevronDown,
   ExternalLink,
   X,
   Link as LinkIcon,
@@ -21,9 +22,11 @@ import {
   Sun,
   Moon,
   Check,
-  Globe
+  Copy,
+  Globe,
+  Home
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { RESUME_DATA_BY_LANG, Experience, Project } from "./constants";
 import { ContactForm } from "./components/ContactForm";
 import felipePhoto from "./assets/images/Felipe.png";
@@ -98,7 +101,31 @@ export default function App() {
   const resumeData = RESUME_DATA_BY_LANG[lang];
 
   const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
+  const [selectedEducation, setSelectedEducation] = useState<number | null>(null);
+  const [expandedProjects, setExpandedProjects] = useState<number[]>([]);
   const [copiedEmail, setCopiedEmail] = useState(false);
+
+  // Detect desktop view for hover displacement effects (disabled on mobile)
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 768;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const toggleProject = (index: number) => {
+    setExpandedProjects(prev =>
+      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
+    );
+  };
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(resumeData.email);
@@ -136,7 +163,64 @@ export default function App() {
   const toggleTheme = () => setIsDark(prev => !prev);
   const toggleLanguage = () => setLang(prev => (prev === 'pt' ? 'en' : 'pt'));
 
-  // Close modal on escape key
+  // Active section tracking for navigation highlighting
+  const [activeSection, setActiveSection] = useState<'home' | 'projects' | 'experience' | 'skills' | 'contact'>('home');
+  const isProgrammaticScroll = useRef(false);
+  const scrollTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Do not recalculate active section while smooth scrolling programmatically to prevent jitter
+      if (isProgrammaticScroll.current) return;
+
+      const scrollPos = window.scrollY + 200;
+      const sections: ('contact' | 'skills' | 'experience' | 'projects')[] = [
+        'contact',
+        'skills',
+        'experience',
+        'projects',
+      ];
+
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollPos) {
+          setActiveSection(id);
+          return;
+        }
+      }
+      setActiveSection('home');
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
+  }, []);
+
+  const scrollToSection = (id: 'home' | 'projects' | 'experience' | 'skills' | 'contact') => {
+    // Immediately set the target section to trigger smooth, direct indicator motion
+    setActiveSection(id);
+    isProgrammaticScroll.current = true;
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    scrollTimeoutRef.current = window.setTimeout(() => {
+      isProgrammaticScroll.current = false;
+    }, 850);
+
+    if (id === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    const el = document.getElementById(id);
+    if (el) {
+      const yOffset = -70;
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
+  // Close modal on escape key & prevent body scrolling when modal is open
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setSelectedExperience(null);
@@ -145,34 +229,68 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleEsc);
   }, []);
 
+  useEffect(() => {
+    if (selectedExperience) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedExperience]);
+
   return (
     <div className="min-h-screen selection:bg-brand-ink selection:text-brand-bg transition-colors duration-300">
-      {/* Navigation Rail / Header */}
-      <nav className="fixed top-0 left-0 w-full h-16 border-b border-brand-line bg-brand-bg/80 backdrop-blur-md z-50 transition-colors duration-300">
+      {/* DESKTOP NAVIGATION BAR (TOP) */}
+      <nav className="hidden md:block fixed top-0 left-0 w-full h-16 border-b border-brand-line bg-brand-bg/80 backdrop-blur-md z-50 transition-colors duration-300">
         <div className="max-w-6xl mx-auto w-full h-full px-4 md:px-6 flex items-center justify-between">
-          <a 
-            href="#" 
-            onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            className="font-mono text-xs font-semibold tracking-wider uppercase text-brand-ink hover:opacity-70 transition-opacity cursor-pointer"
+          <button 
+            onClick={() => scrollToSection('home')}
+            className="font-mono text-xs font-semibold tracking-wider uppercase text-brand-ink hover:opacity-70 transition-opacity cursor-pointer flex items-center gap-2"
           >
-            FELIPE HOFFMANN
-          </a>
-          <div className="flex gap-3 sm:gap-6 items-center">
-            <a href="#projects" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 dark:bg-[#00FF66]"></span>
+            </span>
+            <span>FELIPE HOFFMANN</span>
+          </button>
+          <div className="flex gap-4 lg:gap-6 items-center">
+            <button 
+              onClick={() => scrollToSection('projects')} 
+              className={`text-[11px] font-mono uppercase tracking-widest transition-colors cursor-pointer ${
+                activeSection === 'projects' ? 'text-brand-ink font-bold' : 'text-brand-muted hover:text-brand-ink'
+              }`}
+            >
               {resumeData.nav.projects}
-            </a>
-            <a href="#experience" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">
+            </button>
+            <button 
+              onClick={() => scrollToSection('experience')} 
+              className={`text-[11px] font-mono uppercase tracking-widest transition-colors cursor-pointer ${
+                activeSection === 'experience' ? 'text-brand-ink font-bold' : 'text-brand-muted hover:text-brand-ink'
+              }`}
+            >
               {resumeData.nav.experience}
-            </a>
-            <a href="#skills" className="text-[11px] font-mono uppercase tracking-widest text-brand-muted hover:text-brand-ink transition-colors">
+            </button>
+            <button 
+              onClick={() => scrollToSection('skills')} 
+              className={`text-[11px] font-mono uppercase tracking-widest transition-colors cursor-pointer ${
+                activeSection === 'skills' ? 'text-brand-ink font-bold' : 'text-brand-muted hover:text-brand-ink'
+              }`}
+            >
               {resumeData.nav.skills}
-            </a>
+            </button>
+            <button 
+              onClick={() => scrollToSection('contact')} 
+              className={`text-[11px] font-mono uppercase tracking-widest transition-colors cursor-pointer ${
+                activeSection === 'contact' ? 'text-brand-ink font-bold' : 'text-brand-muted hover:text-brand-ink'
+              }`}
+            >
+              {resumeData.nav.contact}
+            </button>
 
             {/* Language Switch Toggle */}
-            <div className="flex items-center border border-brand-line p-0.5 ml-1 sm:ml-2 bg-brand-bg/50">
+            <div className="flex items-center border border-brand-line p-0.5 ml-2 bg-brand-bg/50">
               <button
                 onClick={() => setLang('pt')}
                 className={`px-2 py-1 text-[10px] font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer ${
@@ -220,6 +338,121 @@ export default function App() {
         </div>
       </nav>
 
+      {/* MOBILE TOP BRAND & SETTINGS BAR */}
+      <header className="md:hidden fixed top-0 left-0 w-full h-14 border-b border-brand-line bg-brand-bg/90 backdrop-blur-md z-40 transition-colors duration-300">
+        <div className="w-full h-full px-4 flex items-center justify-between">
+          <button 
+            onClick={() => scrollToSection('home')}
+            className="font-mono text-xs font-semibold tracking-wider uppercase text-brand-ink flex items-center gap-2 cursor-pointer active:opacity-70"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 dark:bg-[#00FF66]"></span>
+            </span>
+            <span>FELIPE HOFFMANN</span>
+          </button>
+
+          <div className="flex items-center gap-2">
+            {/* Mobile Language Switcher */}
+            <div className="flex items-center border border-brand-line p-0.5 bg-brand-bg/50">
+              <button
+                onClick={() => setLang('pt')}
+                className={`px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+                  lang === 'pt'
+                    ? 'bg-brand-ink text-brand-bg font-bold shadow-sm'
+                    : 'text-brand-muted hover:text-brand-ink'
+                }`}
+                aria-label="Português"
+              >
+                PT
+              </button>
+              <button
+                onClick={() => setLang('en')}
+                className={`px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+                  lang === 'en'
+                    ? 'bg-brand-ink text-brand-bg font-bold shadow-sm'
+                    : 'text-brand-muted hover:text-brand-ink'
+                }`}
+                aria-label="English"
+              >
+                EN
+              </button>
+            </div>
+
+            {/* Mobile Theme Switcher */}
+            <button
+              onClick={toggleTheme}
+              className={`p-1.5 border border-brand-line transition-all flex items-center justify-center cursor-pointer ${
+                isDark 
+                  ? "hover:border-amber-500/50 hover:bg-amber-500/10 text-amber-400" 
+                  : "hover:border-purple-500/50 hover:bg-purple-500/10 text-purple-700 dark:text-purple-400"
+              }`}
+              aria-label={isDark ? "Ativar Modo Claro" : "Ativar Modo Escuro"}
+            >
+              {isDark ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* MOBILE BOTTOM NAVIGATION BAR (ERGONOMIC THUMB DOCK) */}
+      <nav 
+        aria-label="Navegação móvel"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-brand-bg/95 backdrop-blur-xl border-t border-brand-line px-1 sm:px-2 pt-1 pb-[max(0.55rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_-8px_24px_rgba(0,0,0,0.45)] transition-colors duration-300"
+      >
+        <div className="grid grid-cols-5 items-center justify-around max-w-md mx-auto w-full">
+          {[
+            { id: 'home', label: resumeData.nav.home, icon: Home },
+            { id: 'projects', label: resumeData.nav.projects, icon: Code2 },
+            { id: 'experience', label: resumeData.nav.experience, icon: Activity },
+            { id: 'skills', label: resumeData.nav.skills, icon: Zap },
+            { id: 'contact', label: resumeData.nav.contact, icon: Mail },
+          ].map(item => {
+            const Icon = item.icon;
+            const isActive = activeSection === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id as any)}
+                className={`flex flex-col items-center justify-center py-1 px-0.5 min-h-[48px] rounded-lg transition-colors duration-150 cursor-pointer relative ${
+                  isActive 
+                    ? 'text-emerald-600 dark:text-[#00FF66]' 
+                    : 'text-brand-muted hover:text-brand-ink'
+                }`}
+                aria-label={item.label}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="mobileNavActiveIndicator"
+                    className="absolute inset-x-0.5 inset-y-0.5 bg-emerald-500/10 dark:bg-[#00FF66]/10 border border-emerald-500/20 dark:border-[#00FF66]/20 rounded-md -z-10"
+                    transition={{ type: "tween", duration: 0.22, ease: [0.25, 1, 0.5, 1] }}
+                  />
+                )}
+                <div className="h-[20px] flex items-center justify-center">
+                  <Icon 
+                    size={isActive ? 19 : 17} 
+                    className={`transition-colors duration-150 ${
+                      isActive 
+                        ? 'stroke-[2.2] text-emerald-600 dark:text-[#00FF66]' 
+                        : 'stroke-[1.6] text-brand-muted'
+                    }`} 
+                  />
+                </div>
+                <span 
+                  className={`tracking-tight whitespace-nowrap mt-0.5 text-center leading-none transition-colors duration-150 ${
+                    isActive 
+                      ? 'text-[9.5px] font-sans font-bold text-emerald-600 dark:text-[#00FF66]' 
+                      : 'text-[9px] font-sans font-medium text-brand-muted'
+                  }`}
+                >
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
+
       <AnimatePresence mode="wait">
         <motion.div
           key={lang}
@@ -228,7 +461,7 @@ export default function App() {
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
-          <main className="max-w-6xl mx-auto px-4 md:px-6 pt-24 md:pt-32 pb-16 md:pb-24 space-y-20 md:space-y-32">
+          <main className="max-w-6xl mx-auto px-4 md:px-6 pt-18 md:pt-32 pb-28 md:pb-24 space-y-16 md:space-y-32">
             
             {/* HERO SECTION */}
             <motion.section 
@@ -239,48 +472,42 @@ export default function App() {
             >
               <div className="md:col-span-8 space-y-6 md:space-y-8">
                 <div className="space-y-4">
-                  <h1 className="font-display text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter leading-[1] md:leading-[0.9] text-brand-ink">
+                  <h1 className="font-display text-4xl sm:text-7xl md:text-8xl font-bold tracking-tighter leading-[1.05] sm:leading-[1] md:leading-[0.9] text-brand-ink">
                     {resumeData.name}
                   </h1>
-                  <p className="font-display text-xl md:text-3xl text-brand-muted font-light tracking-tight max-w-2xl">
+                  <p className="font-display text-xl sm:text-2xl md:text-3xl text-brand-muted font-light tracking-tight max-w-2xl">
                     {resumeData.title}
                   </p>
                 </div>
 
-                <div className="flex flex-wrap gap-6 items-center text-sm font-mono text-brand-muted">
+                <div className="flex flex-wrap gap-4 sm:gap-6 items-center text-sm font-mono text-brand-muted">
                   <div className="flex items-center gap-2">
                     <MapPin size={16} className="text-rose-500 dark:text-rose-400 shrink-0" /> {resumeData.location}
                   </div>
-                  <div className="relative group inline-block">
-                    <button
-                      onClick={handleCopyEmail}
-                      className="flex items-center gap-2 hover:text-blue-500 dark:hover:text-blue-400 transition-colors cursor-pointer text-left"
-                      aria-label="Copiar e-mail"
-                    >
-                      <Mail size={16} className="text-sky-500 dark:text-sky-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 shrink-0 transition-colors" />
-                      <span>{resumeData.email}</span>
-                    </button>
-
-                    <div 
-                      className={`absolute left-1/2 -translate-x-1/2 -top-7 pointer-events-none transition-all duration-200 z-30 whitespace-nowrap ${
-                        copiedEmail ? "opacity-100 scale-100" : "opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100"
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5 text-[11px] font-mono transition-colors">
-                        {copiedEmail ? (
-                          <>
-                            <Check size={13} className="text-green-600 dark:text-[#00FF66] shrink-0" />
-                            <span className="text-green-600 dark:text-[#00FF66] font-medium">{resumeData.emailTooltip.copied}</span>
-                          </>
-                        ) : (
-                          <>
-                            <span className="inline-block w-1.5 h-1.5 rounded-full bg-zinc-900 dark:bg-white animate-pulse" />
-                            <span className="text-zinc-900 dark:text-white font-medium">{resumeData.emailTooltip.clickToCopy}</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  <button
+                    onClick={handleCopyEmail}
+                    className="group inline-flex items-center gap-2 py-1 px-2 -mx-2 rounded hover:bg-brand-line/20 transition-all cursor-pointer text-left"
+                    aria-label="Copiar e-mail"
+                    title={copiedEmail ? resumeData.emailTooltip.copied : "Copiar e-mail"}
+                  >
+                    <Mail size={16} className="text-sky-500 dark:text-sky-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 shrink-0 transition-colors" />
+                    <span className="text-brand-muted group-hover:text-brand-ink transition-colors">
+                      {resumeData.email}
+                    </span>
+                    <span className="inline-flex items-center ml-0.5">
+                      {copiedEmail ? (
+                        <span className="inline-flex items-center gap-1 font-mono text-[11px] text-emerald-600 dark:text-[#00FF66] font-semibold animate-in fade-in zoom-in-95 duration-150">
+                          <Check size={14} className="stroke-[2.5]" />
+                          <span>{resumeData.emailTooltip.copied}</span>
+                        </span>
+                      ) : (
+                        <Copy 
+                          size={14} 
+                          className="text-brand-muted/60 group-hover:text-brand-ink transition-colors shrink-0" 
+                        />
+                      )}
+                    </span>
+                  </button>
                 </div>
 
                 <div className="font-display max-w-2xl text-base md:text-lg text-brand-muted leading-relaxed">
@@ -289,7 +516,7 @@ export default function App() {
               </div>
 
               <div className="md:col-span-4 flex justify-center md:justify-end">
-                <div className="max-w-[280px] w-full space-y-3">
+                <div className="max-w-[220px] sm:max-w-[280px] w-full space-y-3">
                   <div className="relative aspect-[4/5] overflow-hidden rounded-none border border-transparent bg-brand-bg">
                     <img 
                       src={felipePhoto} 
@@ -300,13 +527,8 @@ export default function App() {
                   </div>
 
                   <button
-                    onClick={() => {
-                      const contactElem = document.getElementById('contact');
-                      if (contactElem) {
-                        contactElem.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }}
-                    className="w-full py-2.5 px-3 rounded-none border border-brand-ink/60 dark:border-white/40 hover:border-green-500 dark:hover:border-[#00FF66] hover:bg-green-500/10 dark:hover:bg-[#00FF66]/10 transition-all flex items-center justify-center gap-2 font-mono text-xs text-brand-ink group cursor-pointer"
+                    onClick={() => scrollToSection('contact')}
+                    className="w-full py-3 px-3 rounded-none border border-brand-ink/60 dark:border-white/40 hover:border-green-500 dark:hover:border-[#00FF66] hover:bg-green-500/10 dark:hover:bg-[#00FF66]/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 font-mono text-xs text-brand-ink group cursor-pointer"
                   >
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -330,78 +552,116 @@ export default function App() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {resumeData.projects.map((project: Project, i: number) => (
-                  <motion.div
-                    key={i}
-                    variants={fadeIn}
-                    initial="initial"
-                    whileInView="animate"
-                    whileHover={{ y: -8, x: 8 }}
-                    transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
-                    viewport={{ once: true }}
-                    className="group p-6 md:p-8 border-2 border-brand-ink transition-colors duration-300 flex flex-col justify-between cursor-default bg-brand-bg hover:bg-brand-ink h-full"
-                  >
-                    <div className="space-y-3 mb-6">
-                      <div className="flex items-center justify-between">
-                        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-muted group-hover:text-brand-bg/50 transition-colors">
-                          {resumeData.sections.projectPrefix} 0{i + 1}
+                {resumeData.projects.map((project: Project, i: number) => {
+                  const isExpanded = expandedProjects.includes(i);
+                  return (
+                    <motion.div
+                      key={i}
+                      variants={fadeIn}
+                      initial="initial"
+                      whileInView="animate"
+                      whileHover={isDesktop ? { y: -6, x: 6 } : undefined}
+                      transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
+                      viewport={{ once: true }}
+                      onClick={() => toggleProject(i)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          toggleProject(i);
+                        }
+                      }}
+                      tabIndex={0}
+                      role="button"
+                      aria-expanded={isExpanded}
+                      aria-label={`${project.title} - ${isExpanded ? resumeData.sections.hideDescription : resumeData.sections.viewDescription}`}
+                      className="group p-6 md:p-7 border-2 border-brand-ink transition-all duration-300 flex flex-col justify-between cursor-pointer bg-brand-bg hover:bg-brand-ink h-full select-none"
+                    >
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-muted group-hover:text-brand-bg/50 transition-colors">
+                            {resumeData.sections.projectPrefix} 0{i + 1}
+                          </div>
+                          {project.link && (
+                            <a
+                              href={project.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 text-[11px] font-mono font-medium text-emerald-600 dark:text-[#00FF66] group-hover:text-brand-bg hover:underline transition-colors cursor-pointer"
+                              onClick={(e) => e.stopPropagation()}
+                              title={resumeData.sections.visitWebsite}
+                            >
+                              <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 dark:bg-[#00FF66]"></span>
+                              </span>
+                              <span>Live</span>
+                              <ExternalLink size={12} />
+                            </a>
+                          )}
                         </div>
+
+                        <h3 className="text-xl font-bold tracking-tight group-hover:text-brand-bg transition-colors">
+                          {project.title}
+                        </h3>
+
+                        {/* Interactive Toggle Affordance */}
+                        <div className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-600 dark:text-[#00FF66] group-hover:text-brand-bg transition-colors pt-0.5">
+                          <span className="font-medium tracking-tight">
+                            {isExpanded ? resumeData.sections.hideDescription : resumeData.sections.viewDescription}
+                          </span>
+                          <ChevronDown size={14} className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                        </div>
+
+                        {/* Expandable Description */}
+                        <AnimatePresence initial={false}>
+                          {isExpanded && (
+                            <motion.div
+                              key="description"
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                              className="overflow-hidden"
+                            >
+                              <p className="text-sm text-brand-muted group-hover:text-brand-bg/85 leading-relaxed pt-2 pb-1 border-t border-brand-line/40 group-hover:border-brand-bg/20 transition-colors">
+                                {project.description}
+                              </p>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+
+                      <div className="mt-auto space-y-4 pt-4">
+                        {project.tags && (
+                          <div className="flex flex-wrap gap-2">
+                            {project.tags.map((tag: string) => (
+                              <span key={tag} className={`text-[9px] font-mono font-semibold uppercase tracking-widest px-2 py-1 border border-brand-line text-brand-muted dark:text-zinc-400 bg-brand-bg/50 transition-all ${getTagColorClass(tag)}`}>
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
                         {project.link && (
-                          <a
-                            href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-[11px] font-mono font-medium text-emerald-600 dark:text-[#00FF66] group-hover:text-brand-bg hover:underline transition-colors cursor-pointer"
-                            onClick={(e) => e.stopPropagation()}
-                            title={resumeData.sections.visitWebsite}
-                          >
-                            <span className="relative flex h-2 w-2">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 dark:bg-[#00FF66]"></span>
-                            </span>
-                            <span>Live</span>
-                            <ExternalLink size={12} />
-                          </a>
+                          <div className="pt-3 border-t border-brand-line/50 group-hover:border-brand-bg/20">
+                            <a
+                              href={project.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center justify-between w-full text-xs font-mono tracking-wider font-semibold text-brand-ink group-hover:text-brand-bg hover:text-emerald-600 dark:hover:text-[#00FF66] transition-colors cursor-pointer"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <span className="flex items-center gap-2">
+                                <span>{resumeData.sections.visitWebsite}</span>
+                              </span>
+                              <ExternalLink size={14} className="shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                            </a>
+                          </div>
                         )}
                       </div>
-                      <h3 className="text-xl font-bold tracking-tight group-hover:text-brand-bg transition-colors">
-                        {project.title}
-                      </h3>
-                      <p className="text-sm text-brand-muted group-hover:text-brand-bg/70 leading-relaxed transition-colors">
-                        {project.description}
-                      </p>
-                    </div>
-
-                    <div className="mt-auto space-y-4 pt-2">
-                      {project.tags && (
-                        <div className="flex flex-wrap gap-2">
-                          {project.tags.map((tag: string) => (
-                            <span key={tag} className={`text-[9px] font-mono font-semibold uppercase tracking-widest px-2 py-1 border border-brand-line text-brand-muted dark:text-zinc-400 bg-brand-bg/50 transition-all ${getTagColorClass(tag)}`}>
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      {project.link && (
-                        <div className="pt-3 border-t border-brand-line/50 group-hover:border-brand-bg/20">
-                          <a
-                            href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center justify-between w-full text-xs font-mono tracking-wider font-semibold text-brand-ink group-hover:text-brand-bg hover:text-emerald-600 dark:hover:text-[#00FF66] transition-colors cursor-pointer"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <span className="flex items-center gap-2">
-                              <span>{resumeData.sections.visitWebsite}</span>
-                            </span>
-                            <ExternalLink size={14} className="shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                          </a>
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  );
+                })}
               </div>
             </section>
 
@@ -426,24 +686,24 @@ export default function App() {
                     <motion.div 
                       key={i} 
                       variants={fadeIn} 
-                      whileHover={{ x: 10 }}
+                      whileHover={isDesktop ? { x: 10 } : undefined}
                       transition={{ duration: 0.2, ease: "easeOut" }}
                       onClick={() => setSelectedExperience(exp)}
-                      className="group relative pl-8 border-l border-brand-line space-y-3 hover:border-green-500 dark:hover:border-[#00FF66] transition-colors cursor-pointer"
+                      className="group relative pl-6 sm:pl-8 py-1 border-l border-brand-line space-y-3 hover:border-green-500 dark:hover:border-[#00FF66] active:opacity-80 transition-all cursor-pointer"
                     >
-                      <div className="absolute -left-[5px] top-1.5 w-2 h-2 bg-brand-line group-hover:bg-green-500 dark:group-hover:bg-[#00FF66] transition-colors" />
+                      <div className="absolute -left-[5px] top-2.5 w-2 h-2 bg-brand-line group-hover:bg-green-500 dark:group-hover:bg-[#00FF66] transition-colors" />
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                         <h3 className="font-display text-xl font-bold tracking-tight">{exp.role}</h3>
-                        <span className="font-mono text-xs text-brand-muted uppercase tracking-tighter bg-brand-line/30 px-2 py-1">
+                        <span className="font-mono text-xs text-brand-muted uppercase tracking-tighter bg-brand-line/30 px-2 py-1 self-start md:self-auto">
                           {exp.period}
                         </span>
                       </div>
                       <div className="text-brand-ink font-medium">{exp.company}</div>
-                      <p className="text-brand-muted leading-relaxed max-w-3xl line-clamp-2">
+                      <p className="text-brand-muted leading-relaxed max-w-3xl line-clamp-2 text-sm sm:text-base">
                         {exp.description}
                       </p>
-                      <div className="flex items-center gap-2 text-[10px] font-mono text-green-600 dark:text-[#00FF66] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-                        {resumeData.sections.viewDetails} <ChevronRight size={10} />
+                      <div className="flex items-center gap-2 text-[11px] sm:text-[10px] font-mono text-green-600 dark:text-[#00FF66] uppercase tracking-widest opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity pt-1">
+                        {resumeData.sections.viewDetails} <ChevronRight size={12} />
                       </div>
                     </motion.div>
                   ))}
@@ -458,22 +718,38 @@ export default function App() {
                   </h2>
                 </div>
                 <div className="space-y-3">
-                  {resumeData.education.map((edu, i) => (
-                    <motion.div 
-                      key={i} 
-                      whileHover={{ x: 6 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="group p-4 -mx-4 border border-transparent hover:border-amber-500/40 hover:bg-amber-500/10 transition-all cursor-default"
-                    >
-                      <div className="font-mono text-[10px] text-brand-muted uppercase tracking-widest group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-                        {edu.period}
-                      </div>
-                      <h3 className="font-display font-bold tracking-tight leading-tight mt-1.5 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-                        {edu.degree}
-                      </h3>
-                      <p className="text-sm text-brand-muted mt-1">{edu.institution}</p>
-                    </motion.div>
-                  ))}
+                  {resumeData.education.map((edu, i) => {
+                    const isSelected = selectedEducation === i;
+                    return (
+                      <motion.div 
+                        key={i} 
+                        whileHover={isDesktop ? { x: 6 } : undefined}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        onClick={() => setSelectedEducation(prev => prev === i ? null : i)}
+                        className={`group p-4 mx-0 sm:-mx-3 border rounded-none transition-all cursor-pointer ${
+                          isSelected
+                            ? 'border-amber-500/60 bg-amber-500/10 shadow-sm'
+                            : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/10 active:border-amber-500/50 active:bg-amber-500/10'
+                        }`}
+                      >
+                        <div className={`font-mono text-[10px] uppercase tracking-widest transition-colors ${
+                          isSelected
+                            ? 'text-amber-600 dark:text-amber-400 font-semibold'
+                            : 'text-brand-muted group-hover:text-amber-600 dark:group-hover:text-amber-400'
+                        }`}>
+                          {edu.period}
+                        </div>
+                        <h3 className={`font-display font-bold tracking-tight leading-tight mt-1.5 transition-colors ${
+                          isSelected
+                            ? 'text-amber-600 dark:text-amber-400'
+                            : 'group-hover:text-amber-600 dark:group-hover:text-amber-400'
+                        }`}>
+                          {edu.degree}
+                        </h3>
+                        <p className="text-sm text-brand-muted mt-1">{edu.institution}</p>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </div>
             </section>
@@ -600,89 +876,112 @@ export default function App() {
       {/* Experience Modal */}
       <AnimatePresence>
         {selectedExperience && (
-          <>
+          <div 
+            className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-6 overflow-hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-exp-title"
+          >
+            {/* Backdrop: click outside card to close */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               onClick={() => setSelectedExperience(null)}
-              className="fixed inset-0 bg-brand-bg/90 backdrop-blur-sm z-[60] cursor-crosshair"
+              className="fixed inset-0 bg-black/75 dark:bg-black/85 backdrop-blur-sm cursor-pointer"
+              title={resumeData.sections.modal.close}
             />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl bg-brand-bg border border-brand-line p-8 md:p-12 z-[70] shadow-2xl overflow-y-auto max-h-[90vh]"
-            >
-              <button 
-                onClick={() => setSelectedExperience(null)}
-                className="absolute top-6 right-6 p-2 hover:bg-brand-line/20 transition-colors"
-                aria-label="Fechar modal"
-              >
-                <X size={20} />
-              </button>
 
-              <div className="space-y-8">
-                <div className="space-y-2">
+            {/* Modal Card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-xl max-h-[85vh] flex flex-col bg-brand-bg border-2 border-brand-ink dark:border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.5)] z-10 overflow-hidden"
+            >
+              {/* Header */}
+              <div className="flex items-start justify-between gap-4 p-5 sm:p-6 border-b border-brand-line bg-brand-bg/95 shrink-0">
+                <div className="space-y-1.5 pr-2">
                   <div className="font-mono text-xs text-brand-muted uppercase tracking-widest flex items-center gap-2">
-                    <span className="w-4 h-px bg-brand-line"></span>
-                    {selectedExperience.period}
+                    <span className="w-3 h-px bg-brand-line"></span>
+                    <span>{selectedExperience.period}</span>
                   </div>
-                  <h3 className="text-4xl font-bold tracking-tighter text-brand-ink">
+                  <h3 id="modal-exp-title" className="text-xl sm:text-2xl font-bold tracking-tight text-brand-ink leading-snug">
                     {selectedExperience.role}
                   </h3>
-                  <div className="flex items-center justify-between">
-                    <div className="text-xl text-brand-muted">{selectedExperience.company}</div>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-brand-muted">
+                    <span className="font-medium text-brand-ink">{selectedExperience.company}</span>
                     {selectedExperience.url && (
                       <a 
                         href={selectedExperience.url} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-brand-ink hover:underline"
+                        className="inline-flex items-center gap-1 text-xs font-mono uppercase tracking-wider text-emerald-600 dark:text-[#00FF66] hover:underline"
+                        title={resumeData.sections.modal.website}
                       >
-                        <LinkIcon size={14} /> {resumeData.sections.modal.website}
+                        <LinkIcon size={12} /> {resumeData.sections.modal.website}
                       </a>
                     )}
                   </div>
                 </div>
 
-                <div className="h-px bg-brand-line w-full" />
+                {/* 'X' Close button */}
+                <button 
+                  onClick={() => setSelectedExperience(null)}
+                  className="p-2 border border-brand-line hover:border-brand-ink hover:bg-brand-ink hover:text-brand-bg text-brand-ink transition-colors cursor-pointer shrink-0 rounded-none active:scale-95"
+                  aria-label={resumeData.sections.modal.close}
+                  title={resumeData.sections.modal.close}
+                >
+                  <X size={18} />
+                </button>
+              </div>
 
-                <div className="space-y-4">
+              {/* Scrollable Body (Scroll up and down) */}
+              <div className="overflow-y-auto overscroll-contain p-5 sm:p-6 space-y-6 flex-1 text-brand-ink">
+                {/* Description */}
+                <div className="space-y-2">
                   <h4 className="font-mono text-[10px] uppercase tracking-widest text-brand-muted">
                     {resumeData.sections.modal.description}
                   </h4>
-                  <p className="text-lg leading-relaxed text-brand-muted">
+                  <p className="text-sm sm:text-base leading-relaxed text-brand-muted font-sans whitespace-pre-line">
                     {selectedExperience.description}
                   </p>
                 </div>
 
-                {selectedExperience.technologies && (
-                  <div className="space-y-4">
+                {/* Technologies */}
+                {selectedExperience.technologies && selectedExperience.technologies.length > 0 && (
+                  <div className="space-y-2.5 pt-4 border-t border-brand-line/50">
                     <h4 className="font-mono text-[10px] uppercase tracking-widest text-brand-muted">
                       {resumeData.sections.modal.technologies}
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedExperience.technologies.map(tech => (
-                        <span key={tech} className="px-3 py-1 bg-brand-line/30 text-brand-ink text-xs font-mono uppercase tracking-tighter">
+                        <span 
+                          key={tech} 
+                          className="px-2.5 py-1 bg-brand-line/30 text-brand-ink text-[11px] font-mono uppercase tracking-tight border border-brand-line/50"
+                        >
                           {tech}
                         </span>
                       ))}
                     </div>
                   </div>
                 )}
+              </div>
 
-                <div className="pt-8">
-                   <button 
-                    onClick={() => setSelectedExperience(null)}
-                    className="w-full py-4 border border-brand-ink bg-brand-ink text-brand-bg font-mono text-xs uppercase tracking-widest hover:bg-brand-bg hover:text-brand-ink transition-all"
-                  >
-                    {resumeData.sections.modal.close}
-                  </button>
-                </div>
+              {/* Footer with Close Button */}
+              <div className="p-4 sm:p-5 border-t border-brand-line bg-brand-bg shrink-0">
+                <button 
+                  onClick={() => setSelectedExperience(null)}
+                  className="w-full py-3 border border-brand-ink bg-brand-ink text-brand-bg font-mono text-xs uppercase tracking-widest hover:bg-brand-bg hover:text-brand-ink active:scale-[0.99] transition-all cursor-pointer font-semibold"
+                >
+                  {resumeData.sections.modal.close}
+                </button>
               </div>
             </motion.div>
-          </>
+          </div>
         )}
       </AnimatePresence>
     </div>
