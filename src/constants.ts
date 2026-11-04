@@ -249,6 +249,12 @@ export const RESUME_DATA_BY_LANG: Record<'pt' | 'en', ResumeData> = {
         tags: ["JavaScript", "Supabase", "CMS / Admin", "Registro.br"]
       },
       {
+        title: "EVA Braille — App web de aprendizagem de Braille multissensorial",
+        description: "Aplicativo web (PWA) desenvolvido para a EVA, edtech de impacto social que produz materiais pedagógicos em Braille com impressão 3D e PET reciclado. Ensina o alfabeto Braille, letras acentuadas e números por estímulos visuais, sonoros e vibratórios, com exercícios de quiz, montar letras, palavras e frases. Tem três perfis (estudante, professor e responsável) com autenticação no Firebase, vínculo por código e acompanhamento de progresso, um sistema de tarefas atribuídas pelo professor e uma interface pensada para acessibilidade (WCAG), com leitor de tela, alto contraste e modo escuro.",
+        link: "https://evabraile.com/",
+        tags: ["Next.js", "TypeScript", "Firebase", "Acessibilidade (WCAG)", "PWA"]
+      },
+      {
         title: "Desenvolvimento de sistema SaaS para gestão de times (Google AI Studio + Firebase)",
         description: "Plataforma SaaS completa para gestão e colaboração de equipes, desenvolvida com integração ao Google AI Studio para maior praticidade e aceleração no desenvolvimento de inteligência artificial. Utiliza o Google Firebase para autenticação e armazenamento de dados em tempo real, além de contar com arquitetura robusta de controle de acesso (RBAC) com diferentes níveis de permissão para administradores e times.",
         tags: ["Google AI Studio", "Google Firebase", "SaaS", "Níveis de Acesso (RBAC)"]
@@ -410,6 +416,12 @@ export const RESUME_DATA_BY_LANG: Record<'pt' | 'en', ResumeData> = {
         description: "Full-stack development of a responsive, interactive website for Fuzzi Esquadrias store, integrating Supabase for cloud image storage and database management, hosted via Registro.br. Features custom product showcases, project galleries, and customer reviews, backed by a dedicated Admin Dashboard (CMS) enabling live review moderation, featured project curation, and homepage hero banner customization.",
         link: "https://www.fuzziesquadrias.com.br/",
         tags: ["JavaScript", "Supabase", "CMS / Admin", "Registro.br"]
+      },
+      {
+        title: "EVA Braille — Multisensory Braille Learning Web App",
+        description: "Progressive web app (PWA) built for EVA, a social-impact edtech that produces Braille teaching materials using 3D printing and recycled PET. It teaches the Braille alphabet, accented letters and numbers through visual, audio and haptic cues, with quiz, letter-building, word-building and sentence-building exercises. It has three roles (student, teacher and guardian) with Firebase authentication, code-based linking and progress tracking, a teacher assignment system, and an accessibility-first interface (WCAG) with screen reader support, high contrast and dark mode.",
+        link: "https://evabraile.com/",
+        tags: ["Next.js", "TypeScript", "Firebase", "Accessibility (WCAG)", "PWA"]
       },
       {
         title: "SaaS Team Management Platform (Google AI Studio + Firebase)",
